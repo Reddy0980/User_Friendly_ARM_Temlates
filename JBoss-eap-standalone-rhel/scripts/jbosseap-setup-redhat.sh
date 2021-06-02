@@ -49,7 +49,6 @@ echo "Initial JBoss EAP setup" | adddate >> jbosseap.install.log
 subscription-manager config --rhsm.auto_enable_yum_plugins=0
 echo "subscription-manager register --username RHSM_USER --password RHSM_PASSWORD" | adddate >> jbosseap.install.log
 subscription-manager register --username $RHSM_USER --password $RHSM_PASSWORD >> jbosseap.install.log 2>&1
-flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Red Hat Subscription Manager Registration Failed" | adddate >> jbosseap.install.log; exit $flag;  fi
 echo "subscription-manager attach --pool=EAP_POOL" | adddate >> jbosseap.install.log
 subscription-manager attach --pool=${RHSM_POOL} >> jbosseap.install.log 2>&1
 flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" | adddate >> jbosseap.install.log; exit $flag;  fi
