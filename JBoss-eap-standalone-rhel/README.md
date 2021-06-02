@@ -51,7 +51,7 @@ Note that the users also have the option to choose between the Red Hat Enterpris
 
 Following is the Architecture:
 
-![alt text](images/rhel-arch.png)
+![alt text](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/jboss-eap-standalone-rhel/images/rhel-arch.png)
 
 To learn more about the JBoss Enterprise Application Platform, visit: [Documentation for JBoss EAP 7.2](https://access.redhat.com/documentation/red_hat_jboss_enterprise_application_platform/7.2/) and [Documentation for JBoss EAP 7.3](https://access.redhat.com/documentation/red_hat_jboss_enterprise_application_platform/7.3/).
 
