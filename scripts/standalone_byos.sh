@@ -38,12 +38,12 @@ echo 'export EAP_RPM_CONF_STANDALONE="/etc/opt/rh/eap7/wildfly/eap7-standalone.c
 
 echo "Initial JBoss EAP 7.3 setup" | log_info
 echo "subscription-manager register --username RHSM_USER --password RHSM_PASSWORD" | log_info
-subscription-manager register --username $RHSM_USER --password $RHSM_PASSWORD  2>&1 log_err | log_info
+subscription-manager register --username $RHSM_USER --password $RHSM_PASSWORD  2>log_err | log_info
 flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Red Hat Subscription Manager Registration Failed" | log_info ; exit $flag;  fi
 
 echo "Subscribing the system to get access to JBoss EAP 7.3 repos ($RHSM_EAPPOOL)" | log_info
 echo "subscription-manager attach --pool=EAP_POOL" | log_info
-subscription-manager attach --pool=${RHSM_EAPPOOL} 2>&1 log_err | log_info
+subscription-manager attach --pool=${RHSM_EAPPOOL} 2>log_err | log_info
 flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" | log_info  ; exit $flag;  fi
 
 if [ "$RHSM_EAPPOOL" != "$RHSM_RHELPOOL" ]; then
