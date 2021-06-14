@@ -25,7 +25,7 @@ RHSM_PASSWORD=$4
 RHSM_EAPPOOL=$5
 RHSM_RHELPOOL=$6
 
-export EAP_HOME="/opt/rh/eap7/root/usr/share/wildfly"
+export EAP_HOME="/opt/rh/eap7/root/usr/share/wildfly"       
 export EAP_RPM_CONF_STANDALONE="/etc/opt/rh/eap7/wildfly/eap7-standalone.conf"
 export EAP_LAUNCH_CONFIG="/opt/rh/eap7/root/usr/share/wildfly/bin/standalone.conf"
 
@@ -38,25 +38,25 @@ echo 'export EAP_RPM_CONF_STANDALONE="/etc/opt/rh/eap7/wildfly/eap7-standalone.c
 
 echo "Initial JBoss EAP 7.3 setup" | log_info
 echo "subscription-manager register --username RHSM_USER --password RHSM_PASSWORD" | log_info
-subscription-manager register --username $RHSM_USER --password $RHSM_PASSWORD  >> log_err | log_info 2>&1
-flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Red Hat Subscription Manager Registration Failed" | log_info ; exit $flag;  fi
+subscription-manager register --username $RHSM_USER --password $RHSM_PASSWORD >> log_info 2>&1
+flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Red Hat Subscription Manager Registration Failed" | log_err ; exit $flag;  fi
 
-echo "Subscribing the system to get access to JBoss EAP 7.3 repos ($RHSM_EAPPOOL)" | log_info
+echo "Subscribing the system to get access to JBoss EAP 7.3 repos ($RHSM_EAPPOOL)" | log_err
 echo "subscription-manager attach --pool=EAP_POOL" | log_info
-subscription-manager attach --pool=${RHSM_EAPPOOL} >> log_err | log_info 2>&1
-flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" | log_info  ; exit $flag;  fi
+subscription-manager attach --pool=${RHSM_EAPPOOL} >> log_info 2>&1
+flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" | log_err  ; exit $flag;  fi
 
 if [ "$RHSM_EAPPOOL" != "$RHSM_RHELPOOL" ]; then
     echo "Subscribing the system to get access to RHEL repos ($RHSM_RHELPOOL)" | log_info
-    subscription-manager attach --pool=${RHSM_RHELPOOL}  >> log_err | log_info 2>&1
-    flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" | log_info  ; exit $flag;  fi
+    subscription-manager attach --pool=${RHSM_RHELPOOL} >> log_info 2>&1
+    flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" | log_err  ; exit $flag;  fi
 else
     echo "Using the same pool to get access to RHEL repos" | log_info
 fi
 
 # Install JBoss EAP 7.3
 echo "subscription-manager repos --enable=jb-eap-7.3-for-rhel-8-x86_64-rpms"     | log_info
-subscription-manager repos --enable=jb-eap-7.3-for-rhel-8-x86_64-rpms  2>log_err | log_info
+subscription-manager repos --enable=jb-eap-7.3-for-rhel-8-x86_64-rpms >> log_info
 flag=$?; if [ $flag != 0 ] ; then echo  "ERROR! Enabling repos for JBoss EAP Failed" | log_info ; exit $flag;  fi
 
 echo "Installing JBoss EAP 7.3 repos"       | log_info
