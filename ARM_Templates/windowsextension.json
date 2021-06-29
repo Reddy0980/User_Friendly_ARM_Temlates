@@ -97,7 +97,7 @@
       },
       "vmName": {
         "type": "string",
-        "defaultValue": "windows-vm",
+        "defaultValue": "simple-vm",
         "metadata": {
           "description": "Name of the virtual machine."
         }
