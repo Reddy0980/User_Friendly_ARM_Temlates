@@ -4,14 +4,13 @@
     "IsCustom": true,
     "Description": "Ai in a day Custom Role.",
     "Actions": [
-      "Microsoft.ClassicCompute/virtualMachines/write",
-      "Microsoft.ClassicCompute/virtualMachines/start/action",
-      "Microsoft.ClassicCompute/virtualMachines/delete",
-      "Microsoft.ClassicCompute/virtualMachines/restart/action",
-      "Microsoft.ClassicCompute/virtualMachines/stop/action",
-      "Microsoft.ClassicCompute/virtualMachines/shutdown/action",
-      "Microsoft.ClassicStorage/storageAccounts/write",
-      "Microsoft.ClassicStorage/storageAccounts/delete"
+      "Microsoft.Compute/virtualMachines/write",
+      "Microsoft.Compute/virtualMachines/delete",
+      "Microsoft.Compute/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachines/powerOff/action",
+      "Microsoft.Compute/virtualMachines/restart/action",
+      "Microsoft.Storage/storageAccounts/delete",
+      "Microsoft.Storage/storageAccounts/write"
     ],
     "NotActions": [
   
