@@ -5,7 +5,7 @@
     "Description": "Ai in a day Custom Role.",
     "Actions": [
       "Microsoft.Compute/virtualMachines/*",
-      "Microsoft.Storage/storageAccounts/*",,
+      "Microsoft.Storage/storageAccounts/*",
       "Microsoft.Compute/disks/*",
       "Microsoft.Network/networkInterfaces/*",
       "Microsoft.Network/publicIPAddresses/*",
