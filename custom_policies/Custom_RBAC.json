@@ -10,7 +10,8 @@
       "Microsoft.Network/networkInterfaces/*",
       "Microsoft.Network/publicIPAddresses/*",
       "Microsoft.Network/virtualNetworks/*",
-      "Microsoft.Network/networkSecurityGroups/*"
+      "Microsoft.Network/networkSecurityGroups/*",
+      "Microsoft.Resources/deployments/*"
     ],
     "NotActions": [
   
