@@ -1,0 +1,19 @@
+{
+    "Name": "AI in a day custom roles",
+    "Id": null,
+    "IsCustom": true,
+    "Description": "Ai in a day Custom Role.",
+    "Actions": [
+      "Microsoft.ClassicCompute/virtualMachines/write",
+      "Microsoft.ClassicCompute/virtualMachines/start/action",
+      "Microsoft.ClassicCompute/virtualMachines/delete",
+      "Microsoft.ClassicCompute/virtualMachines/restart/action",
+      "Microsoft.ClassicCompute/virtualMachines/stop/action",
+      "Microsoft.ClassicCompute/virtualMachines/shutdown/action",
+      "Microsoft.ClassicStorage/storageAccounts/write",
+      "Microsoft.ClassicStorage/storageAccounts/delete"
+    ],
+    "NotActions": [
+  
+    ]
+  }
