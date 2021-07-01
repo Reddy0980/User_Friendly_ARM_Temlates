@@ -7,7 +7,6 @@
       "Microsoft.Compute/virtualMachines/*",
       "Microsoft.Compute/virtualMachines/extensions/*",
       "Microsoft.Storage/storageAccounts/*",
-      "Microsoft.Compute/disks/*",
       "Microsoft.Network/networkInterfaces/*",
       "Microsoft.Network/publicIPAddresses/*",
       "Microsoft.Network/virtualNetworks/*",
