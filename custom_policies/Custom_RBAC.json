@@ -10,7 +10,7 @@
       "Microsoft.Compute/virtualMachines/powerOff/action",
       "Microsoft.Compute/virtualMachines/restart/action",
       "Microsoft.Storage/storageAccounts/delete",
-      "Microsoft.Storage/storageAccounts/write"
+      "Microsoft.Storage/storageAccounts/write",
       "Microsoft.Compute/disks/write",
       "Microsoft.Compute/disks/delete",
       "Microsoft.Network/networkInterfaces/read",
