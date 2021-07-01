@@ -5,6 +5,7 @@
     "Description": "Ai in a day Custom Role.",
     "Actions": [
       "Microsoft.Compute/virtualMachines/*",
+      "Microsoft.Compute/virtualMachines/extensions/*",
       "Microsoft.Storage/storageAccounts/*",
       "Microsoft.Compute/disks/*",
       "Microsoft.Network/networkInterfaces/*",
