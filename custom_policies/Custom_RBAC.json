@@ -11,6 +11,18 @@
       "Microsoft.Compute/virtualMachines/restart/action",
       "Microsoft.Storage/storageAccounts/delete",
       "Microsoft.Storage/storageAccounts/write"
+      "Microsoft.Compute/disks/write",
+      "Microsoft.Compute/disks/delete",
+      "Microsoft.Network/networkInterfaces/read",
+      "Microsoft.Network/networkInterfaces/write",
+      "Microsoft.Network/networkInterfaces/delete",
+      "Microsoft.Network/networkInterfaces/ipconfigurations/read",
+      "Microsoft.Network/publicIPAddresses/write",
+      "Microsoft.Network/publicIPAddresses/delete",
+      "Microsoft.Network/virtualNetworks/write",
+      "Microsoft.Network/virtualNetworks/delete",
+      "Microsoft.Network/networkSecurityGroups/write",
+      "Microsoft.Network/networkSecurityGroups/delete"
     ],
     "NotActions": [
   
