@@ -296,6 +296,14 @@
       "hostname": {
         "type": "string",
         "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))).dnsSettings.fqdn]"
-      }
+      },
+      "Labvm Username": {
+      "type": "String",
+      "value": "[parameters('adminUsername')]"
+    },
+    "Labvm Password": {
+      "type": "String",
+      "value": "[parameters('adminPassword')]"
+    }
     }
   }
