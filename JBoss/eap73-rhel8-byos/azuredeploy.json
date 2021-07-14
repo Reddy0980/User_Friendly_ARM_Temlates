@@ -283,7 +283,7 @@
             "name": "[parameters('vmName')]",
             "location": "[parameters('location')]",
             "plan": {
-                "name": "rhel-lvm83",
+                "name": "rhel-lvm84",
                 "publisher": "redhat",
                 "product": "rhel-byos"
             },
@@ -306,7 +306,7 @@
                     "imageReference": {
                         "publisher": "redhat",
                         "offer": "rhel-byos",
-                        "sku": "rhel-lvm83",
+                        "sku": "rhel-lvm84",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -344,7 +344,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[format('sh jbosseap-setup-redhat.sh ''{0}'' ''{1}'' ''{2}'' ''{3}'' ''{4}'' ''{5}''',  parameters('jbossEAPUserName'),  parameters('jbossEAPPassword'), parameters('rhsmUserName'), parameters('rhsmPassword'), parameters('rhsmPoolEAP'), parameters('rhsmPoolRHEL'))]"
+                   "commandToExecute": "[format('sh jbosseap-setup-redhat.sh ''{0}'' ''{1}'' ''{2}'' ''{3}'' ''{4}'' ''{5}''',  parameters('jbossEAPUserName'),  parameters('jbossEAPPassword'), parameters('rhsmUserName'), parameters('rhsmPassword'), parameters('rhsmPoolEAP'), parameters('rhsmPoolRHEL'))]"
                 }
             }
         }
