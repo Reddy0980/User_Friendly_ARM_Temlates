@@ -1,7 +1,7 @@
 #!/bin/sh
 log() {
     while IFS= read -r line; do
-        printf '%s %s\n' "$(date "+%Y-%m-%d %H:%M:%S")" "$line" | tee /var/log/jbosseap.install.log
+        printf '%s %s\n' "$(date "+%Y-%m-%d %H:%M:%S")" "$line" >> /var/log/jbosseap.install.log
     done
 }
 
@@ -163,7 +163,7 @@ systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
 echo "Deploy an application" | log; flag=${PIPESTATUS[0]}
 echo "wget -O eap-session-replication.war $fileUrl" | log; flag=${PIPESTATUS[0]}
 wget -O "eap-session-replication.war" "$fileUrl" | log; flag=${PIPESTATUS[0]}
-if [ $flag != 0 ] ; then echo  "ERROR! Sample Application Download Failed" >&2 ; exit $flag; fi
+if [ $flag != 0 ] ; then echo  "ERROR! Sample Application Download Failed" >&2 log; exit $flag; fi
 echo "cp ./eap-session-replication.war $EAP_HOME/wildfly/standalone/deployments/" | log; flag=${PIPESTATUS[0]}
 cp ./eap-session-replication.war $EAP_HOME/wildfly/standalone/deployments/ | log; flag=${PIPESTATUS[0]}
 echo "touch $EAP_HOME/wildfly/standalone/deployments/eap-session-replication.war.dodeploy" | log; flag=${PIPESTATUS[0]}
