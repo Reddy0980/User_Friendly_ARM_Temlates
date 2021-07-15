@@ -39,7 +39,7 @@
             }
         },
         "vmSize": {
-            "defaultValue": "Standard_B1ms",
+            "defaultValue": "Standard_DS2_v2",
             "type": "String",
             "metadata": {
                 "description": "The size of the Virtual Machine"
@@ -82,13 +82,6 @@
             "type": "String",
             "metadata": {
                 "description": "Storage account kind"
-            }
-        },
-        "storageAccountResourceGroup": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().name]",
-            "metadata": {
-                "description": "Resource group of Boot Diagnostics Storage account"
             }
         },
         "virtualNetworkNewOrExisting": {
@@ -288,7 +281,7 @@
                 "product": "rhel-byos"
             },
             "dependsOn": [
-                "[if(equals(parameters('bootDiagnostics'),'on'), parameters('storageAccountName'), variables('networkSecurityGroupName'))]",
+                "[if(equals(parameters('bootDiagnostics'),'On'), parameters('storageAccountName'), variables('networkSecurityGroupName'))]",
                 "[variables('networkSecurityGroupName')]",
                 "[variables('nicName')]"
             ],
@@ -322,7 +315,7 @@
                         }
                     ]
                 },
-                "diagnosticsProfile": "[if(equals(parameters('bootDiagnostics'),'on'), json(concat('{\"bootDiagnostics\": {\"enabled\": true,\"storageUri\": \"https://', parameters('storageAccountName'), '.blob.core.windows.net', '\"}}')), json(concat('{\"bootDiagnostics\": {\"enabled\": false}}')))]"
+                "diagnosticsProfile": "[if(equals(parameters('bootDiagnostics'),'On'), json(concat('{\"bootDiagnostics\": {\"enabled\": true,\"storageUri\": \"https://', parameters('storageAccountName'), '.blob.core.windows.net', '\"}}')), json(concat('{\"bootDiagnostics\": {\"enabled\": false}}')))]"
             }
         },
         {
