@@ -288,7 +288,7 @@
                 "product": "rhel-byos"
             },
             "dependsOn": [
-                "[if(equals(parameters('bootDiagnostics'),'On'), parameters('storageAccountName'), variables('networkSecurityGroupName'))]",
+                "[if(equals(parameters('bootDiagnostics'),'on'), parameters('storageAccountName'), variables('networkSecurityGroupName'))]",
                 "[variables('networkSecurityGroupName')]",
                 "[variables('nicName')]"
             ],
@@ -322,7 +322,7 @@
                         }
                     ]
                 },
-                "diagnosticsProfile": "[if(equals(parameters('bootDiagnostics'),'On'), json(concat('{\"bootDiagnostics\": {\"enabled\": true,\"storageUri\": \"https://', parameters('storageAccountName'), '.blob.core.windows.net', '\"}}')), json(concat('{\"bootDiagnostics\": {\"enabled\": false}}')))]"
+                "diagnosticsProfile": "[if(equals(parameters('bootDiagnostics'),'on'), json(concat('{\"bootDiagnostics\": {\"enabled\": true,\"storageUri\": \"https://', parameters('storageAccountName'), '.blob.core.windows.net', '\"}}')), json(concat('{\"bootDiagnostics\": {\"enabled\": false}}')))]"
             }
         },
         {
