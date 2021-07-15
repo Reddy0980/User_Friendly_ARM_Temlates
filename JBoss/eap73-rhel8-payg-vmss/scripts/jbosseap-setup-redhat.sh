@@ -102,7 +102,7 @@ if [ $flag != 0 ] ; then echo  "ERROR! Enabling repos for JBoss EAP Failed" >&2 
 echo "Installing JBoss EAP 7.3 repos" | log; flag=${PIPESTATUS[0]}
 echo "yum groupinstall -y jboss-eap7" | log; flag=${PIPESTATUS[0]}
 yum groupinstall -y jboss-eap7 | log; flag=${PIPESTATUS[0]}
-if [ $flag != 0 ] ; then echo  "ERROR! JBoss EAP installation Failed" >&2 ; exit $flag;  fi
+if [ $flag != 0 ] ; then echo  "ERROR! JBoss EAP installation Failed" >&2 log; exit $flag;  fi
 
 echo "sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config" | log; flag=${PIPESTATUS[0]}
 sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config | log; flag=${PIPESTATUS[0]}
