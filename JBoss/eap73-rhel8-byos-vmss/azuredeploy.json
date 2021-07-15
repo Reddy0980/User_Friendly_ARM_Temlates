@@ -97,15 +97,27 @@
         "description": "Name of the Storage Account."
       }
     },
+    "storageAccountType": {
+      "defaultValue": "Standard_LRS",
+      "type": "String",
+      "metadata": {
+          "description": "Storage account type"
+      }
+  },
+  "storageAccountKind": {
+      "defaultValue": "Storage",
+      "type": "String",
+      "metadata": {
+          "description": "Storage account kind"
+      }
+  },
     "bootStorageReplication": {
       "type": "string",
       "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
-        "Standard_ZRS",
         "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
+        "Standard_RAGRS"
       ],
       "metadata": {
         "description": "Select the Replication Strategy for the Storage account"
@@ -131,10 +143,8 @@
       "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
-        "Standard_ZRS",
         "Standard_GRS",
-        "Standard_RAGRS",
-        "Premium_LRS"
+        "Standard_RAGRS"
       ],
       "metadata": {
         "description": "Select the Replication Strategy for the Storage account"
@@ -210,13 +220,7 @@
       "allowedValues": [
         "Standard_DS2_v2",
         "Standard_DS3_v2",
-        "Standard_DS4_v2",
-        "Standard_E2S_v3",
-        "Standard_E4S_v3",
-        "Standard_E8S_v3",
-        "Standard_F2S_v2",
-        "Standard_F4S_v2",
-        "Standard_F8S_v2"
+        "Standard_DS4_v2"
       ],
       "metadata": {
         "description": "The size of the Virtual Machine scale set"
@@ -243,6 +247,7 @@
     "loadBalancersName": "jbosseap-lb",
     "vmssInstanceName": "[concat('jbosseap-server', parameters('vmssName'))]",
     "nicName": "jbosseap-server-nic",
+    "bootDiagnosticsCheck": "[and(equals(parameters('bootStorageNewOrExisting'), 'new'), equals(parameters('bootDiagnostics'),'on'))]",
     "backendPoolName": "jbosseap-server",
     "frontendName": "LoadBalancerFrontEnd",
     "natRuleName": "adminconsolerule",
@@ -264,11 +269,11 @@
     "imageReference": {
       "publisher": "redhat",
       "offer": "rhel-byos",
-      "sku": "rhel-lvm83",
+      "sku": "rhel-lvm84",
       "version": "latest"
     },
     "plan": {
-      "name": "rhel-lvm83",
+      "name": "rhel-lvm84",
       "publisher": "redhat",
       "product": "rhel-byos"
     },
@@ -278,7 +283,7 @@
   },
   "resources": [
     {
-      "condition": "[equals(parameters('bootStorageNewOrExisting'), 'new')]",
+      "condition": "[variables('bootDiagnosticsCheck')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "name": "[parameters('bootStorageAccountName')]",
@@ -286,7 +291,7 @@
       "sku": {
         "name": "[parameters('bootStorageReplication')]"
       },
-      "kind": "Storage",
+      "kind": "[parameters('storageAccountKind')]",
       "tags": {
         "QuickstartName": "JBoss EAP on RHEL VMSS"
       }
@@ -299,7 +304,7 @@
       "sku": {
         "name": "[parameters('eapstorageReplication')]"
       },
-      "kind": "Storage",
+      "kind": "[parameters('storageAccountKind')]",
       "tags": {
         "QuickstartName": "JBoss EAP on RHEL VMSS"
       },
@@ -352,8 +357,8 @@
       "dependsOn": [
         "[variables('loadBalancersName')]",
         "[parameters('virtualNetworkName')]",
-        "[parameters('bootStorageAccountName')]",
-        "[parameters('eapStorageAccountName')]"
+        "[parameters('eapStorageAccountName')]",
+        "[if(equals(parameters('bootDiagnostics'),'on'), parameters('bootStorageAccountName'), parameters('virtualNetworkName'))]"
       ],
       "tags": {
         "QuickstartName": "JBoss EAP on RHEL VMSS"
@@ -407,12 +412,7 @@
               }
             ]
           },
-          "diagnosticsProfile": {
-            "bootDiagnostics": {
-              "enabled": "[if(equals(parameters('bootDiagnostics'), 'on'), 'true', 'false')]",
-              "storageUri": "[reference(resourceId(parameters('bootStorageAccountResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('bootStorageAccountName')), '2017-10-01').primaryEndpoints['blob']]"
-            }
-          },
+          "diagnosticsProfile": "[if(equals(parameters('bootDiagnostics'),'on'), json(concat('{\"bootDiagnostics\": {\"enabled\": true,\"storageUri\": \"https://', parameters('bootStorageAccountName'), '.blob.core.windows.net', '\"}}')), json(concat('{\"bootDiagnostics\": {\"enabled\": false}}')))]",
           "extensionProfile": {
             "extensions": [
               {
