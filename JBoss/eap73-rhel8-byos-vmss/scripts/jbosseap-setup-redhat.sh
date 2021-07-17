@@ -87,11 +87,20 @@ echo "subscription-manager attach --pool=EAP_POOL" | log; flag=${PIPESTATUS[0]}
 subscription-manager attach --pool=${RHSM_POOL} | log; flag=${PIPESTATUS[0]}
 if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" >&2 log; exit $flag;  fi
 #######################
+
+if [ "$EAP_POOL" != "$RHEL_POOL" ]; then
+    echo "Subscribing the system to get access to RHEL repos ($RHEL_POOL)" | log; flag=${PIPESTATUS[0]}
+    subscription-manager attach --pool=${RHEL_POOL}  | log; flag=${PIPESTATUS[0]}
+    if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" >&2 log; exit $flag;  fi
+else
+    echo "Using the same pool to get access to RHEL repos" | log; flag=${PIPESTATUS[0]}
+fi
+
 ####################### Attach RHEL Pool
-echo "Attaching Pool ID for RHEL OS" | log; flag=${PIPESTATUS[0]}
-echo "subscription-manager attach --pool=RHEL_POOL" | log; flag=${PIPESTATUS[0]}
-subscription-manager attach --pool=${RHEL_POOL} | log; flag=${PIPESTATUS[0]}
-if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" >&2 log; exit $flag;  fi
+#echo "Attaching Pool ID for RHEL OS" | log; flag=${PIPESTATUS[0]}
+#echo "subscription-manager attach --pool=RHEL_POOL" | log; flag=${PIPESTATUS[0]}
+#subscription-manager attach --pool=${RHEL_POOL} | log; flag=${PIPESTATUS[0]}
+#if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" >&2 log; exit $flag;  fi
 #######################
 
 ####################### Install openjdk: is it needed? it should be installed with eap7.3
