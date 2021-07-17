@@ -217,11 +217,6 @@
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_DS2_v2",
-      "allowedValues": [
-        "Standard_DS2_v2",
-        "Standard_DS3_v2",
-        "Standard_DS4_v2"
-      ],
       "metadata": {
         "description": "The size of the Virtual Machine scale set"
       }
