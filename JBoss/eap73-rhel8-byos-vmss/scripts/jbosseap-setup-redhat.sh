@@ -88,7 +88,7 @@ subscription-manager attach --pool=${RHSM_POOL} | log; flag=${PIPESTATUS[0]}
 if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for JBoss EAP Failed" >&2 log; exit $flag;  fi
 #######################
 
-if [ "$EAP_POOL" != "$RHEL_POOL" ]; then
+if [ "$RHSM_POOL" != "$RHEL_POOL" ]; then
     echo "Subscribing the system to get access to RHEL repos ($RHEL_POOL)" | log; flag=${PIPESTATUS[0]}
     subscription-manager attach --pool=${RHEL_POOL}  | log; flag=${PIPESTATUS[0]}
     if [ $flag != 0 ] ; then echo  "ERROR! Pool Attach for RHEL Failed" >&2 log; exit $flag;  fi
