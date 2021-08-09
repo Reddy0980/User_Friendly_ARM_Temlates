@@ -1,0 +1,48 @@
+{
+  "if": {
+    "anyOf": [
+      {
+        "not": {
+          "anyOf": [
+            {
+              "field": "type",
+              "like": "Microsoft.Synapse/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.DataFactory/datafactories/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.ContainerRegistry/registries/*"
+            },
+            {
+              "field": "type",
+              "like": "microsoft.insights/components/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.KeyVault/vaults/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.MachineLearningServices/workspaces/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.Storage/storageAccounts/*"
+            },
+            {
+              "field": "type",
+              "in": [ "Microsoft.Synapse", "Microsoft.DataFactory/datafactories/", "Microsoft.ContainerRegistry/registries", "microsoft.insights/components", "Microsoft.KeyVault/vaults", "Microsoft.MachineLearningServices/workspaces", "Microsoft.Storage/storageAccounts" ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "then": {
+    "effect": "deny"
+  }
+}
