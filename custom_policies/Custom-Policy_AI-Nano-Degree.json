@@ -35,6 +35,18 @@
                   {
            "field": "type",
            "like": "Microsoft.Storage/storageAccounts/*"
+           },
+                  {
+           "field": "type",
+           "like": "Microsoft.CognitiveServices/accounts/ComputerVision/*"
+           },
+                  {
+           "field": "type",
+           "like": "Microsoft.CognitiveServices/accounts/FormRecognizer/custom/*"
+           },
+                  {
+           "field": "type",
+           "like": "Microsoft.Media/videoAnalyzers/*"
            }
                ]
      }
