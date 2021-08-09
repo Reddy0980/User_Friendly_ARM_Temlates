@@ -1,0 +1,73 @@
+{
+    "if": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Storage/storageAccounts"
+            },
+            {
+              "not": {
+                "field": "Microsoft.Storage/storageAccounts/sku.name",
+                "equals": "Standard_LRS"
+              }
+            }
+          ]
+        },
+        {
+          "not": {
+            "anyOf": [
+              {
+                "field": "type",
+                "like": "Microsoft.Resources/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.MachineLearning/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Storage/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.MachineLearningServices/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.insights/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.KeyVault/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.ContainerRegistry/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.web/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Search/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.CognitiveServices/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.BotService/*"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
