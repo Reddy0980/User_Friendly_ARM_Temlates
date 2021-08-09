@@ -1,0 +1,89 @@
+{
+  "if": {
+     "anyOf": [
+    {
+     "not": {
+       "anyOf": [
+                   {
+           "field": "type",
+           "like": "Microsoft.Compute/disks/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Compute/virtualMachines/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Compute/virtualMachines/extensions/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Network/networkInterfaces/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Network/networkSecurityGroups/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Network/publicIPAddresses/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Network/virtualNetworks/*"
+           },
+         {
+           "field": "type",
+           "like": "Microsoft.OperationalInsights/workspaces/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.OperationsManagement/solutions/*"
+           },
+         {
+           "field": "type",
+           "like": "Microsoft.Insights/AlertRules/*"
+           },
+         {
+           "field": "type",
+           "like": "Microsoft.Insights/ActivityLogAlerts/*"
+           },
+                   {
+           "field": "type",
+           "like": "Microsoft.Insights/ActionGroups/*"
+           },
+         {
+           "field": "type",
+           "like": "Microsoft.Storage/storageAccounts/*"
+           },
+                   {
+           "field": "type",
+           "in": ["Microsoft.Storage/storageAccounts/", "Microsoft.Insights/AlertRules", "Microsoft.Insights/ActivityLogAlerts", "Microsoft.Insights/ActionGroups", "Microsoft.Compute/disks", "Microsoft.Compute/virtualMachines", "Microsoft.Compute/virtualMachines/extensions", "Microsoft.Network/networkInterfaces", "Microsoft.Network/networkSecurityGroups", "Microsoft.Network/publicIPAddresses", "Microsoft.Network/virtualNetworks", "Microsoft.OperationalInsights/workspaces", "Microsoft.OperationsManagement/solutions"]
+           }
+               ]
+     }
+    },
+     {
+     "allOf": [
+     {
+       "field": "type",
+       "equals": "Microsoft.Compute/virtualMachines"
+     },
+     {
+       "not": {
+       "allOf": [
+         {
+         "field": "Microsoft.Compute/virtualMachines/sku.name",
+         "in": ["Standard_DS1_v2", "Standard_DS2_v2", "Basic_A1"]
+         }
+       ]
+       }
+     }
+      ]
+   }
+   ]
+ },
+ "then": {
+   "effect": "deny"
+ }
+}
