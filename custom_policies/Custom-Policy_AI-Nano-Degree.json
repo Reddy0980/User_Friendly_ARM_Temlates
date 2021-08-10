@@ -42,7 +42,7 @@
            },
                   {
            "field": "type",
-           "like": "Microsoft.CognitiveServices/accounts/FormRecognizer/custom/*"
+           "like": "Microsoft.CognitiveServices/accounts/FormRecognizer/*"
            },
                   {
            "field": "type",
