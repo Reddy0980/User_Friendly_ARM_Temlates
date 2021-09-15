@@ -2,35 +2,41 @@
 
 adddate() {
     while IFS= read -r line; do
-        echo '%s %s\n' "$(date "+%Y-%m-%d %H:%M:%S")" "$line";
+        printf '%s %s\n' "$(date "+%Y-%m-%d %H:%M:%S")" "$line";
     done
 }
 
-ip=ip_address
+ip=IP_ADD
 url="https://$ip/api/serverInfo"
 
-echo "Cluster IP: $ip" >> adddate >> samsung.log
-echo "curl -X GET --header 'Accept: application/json' -k $url" >> adddate >> samsung.log
-curl -X GET --header 'Accept: application/json' -k $url >> samsung.json
+echo "Cluster IP: $ip" | adddate >> samsung.log
+echo "Cluster URL: $url" | adddate >> samsung.log
 
 N=0
-echo "while [ $N -ne 1 ]" >> adddate >> samsung.log
-while [ $N -lt 1 ]
+echo "Fetching details from api server" | adddate >> samsung.log
+while [ $N -lt 2 ]
 do
-   rm samsung.json
-   echo "curl -X GET --header 'Accept: application/json' -k $url" >> adddate >> samsung.log
-   curl -X GET --header 'Accept: application/json' -k $url
-   curl -X GET --header 'Accept: application/json' -k $url >> samsung.json
-   grep clusterState samsung.json >> adddate >> samsung.log
+   echo "curl -X GET --header 'Accept: application/json' -k $url" | adddate >> samsung.log
+   curl -X GET --header 'Accept: application/json' -k $url >> samsung.json 2>&1
+   flag=$?; if [ $flag != 0 ] ; then echo  "ERROR ! Cluster Deployment Failed " | adddate >> samsung.log; rm samsung.json; exit $flag;  fi
+   grep clusterState samsung.json | adddate >> samsung.log
    if grep -o ACTIVE samsung.json
    then
-   echo "Cluster state is ACTIVE !!" >> adddate >> samsung.log
+   echo "Cluster state is ACTIVE !!" | adddate >> samsung.log
    N=2
+   rm samsung.json
    else
-   echo "sleeping for 10 sec" >> adddate >> samsung.log
+   echo "Cluster state is pending ..." | adddate >> samsung.log
    sleep 10
+   rm samsung.json
    fi
 done
 
-rm samsung.json
-echo "Done" >> adddate >> samsung.log
+if [ $N -eq 2 ]
+then
+    echo "Cluster is deployed successfully!" | adddate >> samsung.log
+else
+    echo "Deployment is taking too long..." | adddate >> samsung.log
+    echo "Cluster deployment failed!" | adddate >> samsung.log
+
+echo "Done" | adddate >> samsung.log
