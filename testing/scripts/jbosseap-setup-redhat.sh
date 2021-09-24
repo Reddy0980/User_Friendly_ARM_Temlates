@@ -12,6 +12,8 @@ openport() {
     sudo firewall-cmd  --zone=public --add-port=$port/tcp  --permanent  | log; flag=${PIPESTATUS[0]}
 }
 
+private_ip=$(hostname -I)
+
 echo "Red Hat JBoss EAP Cluster Intallation Start " | log; flag=${PIPESTATUS[0]}
 /bin/date +%H:%M:%S  | log; flag=${PIPESTATUS[0]}
 
@@ -155,25 +157,17 @@ echo 'WILDFLY_SERVER_CONFIG=standalone-azure-ha.xml' >> $EAP_RPM_CONF_STANDALONE
 echo "Setting configurations in $EAP_LAUNCH_CONFIG"
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address=0.0.0.0" | log; flag=${PIPESTATUS[0]}
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0" | log; flag=${PIPESTATUS[0]}
-echo -e '\t-> JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(hostname -I)"' | log; flag=${PIPESTATUS[0]}
+echo -e '\t-> JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(private_ip)"' | log; flag=${PIPESTATUS[0]}
 
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
-echo "ip address thing is going on @ad"
-var=$(hostname -I)
-var1="JAVA_OPTS -Djboss.bind.address.private=$var"
-var2=JAVA_OPTS=\"\$"$var1"
-echo -e "$var2\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
-#echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(hostname -I)"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
+#echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(private_ip)"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
+echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.bind.address.private=$private_ip\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.storage_account_name=$STORAGE_ACCOUNT_NAME\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.storage_access_key=$STORAGE_ACCESS_KEY\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.container=$CONTAINER_NAME\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
-echo "adding the 2 lines from issue github @ad2"
-sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-
 ####################### Start the JBoss server and setup eap service
 echo "Start JBoss-EAP service"                  | log; flag=${PIPESTATUS[0]}
 echo "systemctl enable eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
