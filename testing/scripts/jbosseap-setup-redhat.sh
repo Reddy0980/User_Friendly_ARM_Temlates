@@ -157,7 +157,7 @@ echo 'WILDFLY_SERVER_CONFIG=standalone-azure-ha.xml' >> $EAP_RPM_CONF_STANDALONE
 echo "Setting configurations in $EAP_LAUNCH_CONFIG"
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address=0.0.0.0" | log; flag=${PIPESTATUS[0]}
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0" | log; flag=${PIPESTATUS[0]}
-echo -e '\t-> JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(private_ip)"' | log; flag=${PIPESTATUS[0]}
+echo -e "\t-> JAVA_OPTS=\"\$JAVA_OPTS -Djboss.bind.address.private=$(private_ip)\"" | log; flag=${PIPESTATUS[0]}
 
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
