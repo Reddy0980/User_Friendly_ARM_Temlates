@@ -149,15 +149,6 @@ sudo -u jboss $EAP_HOME/wildfly/bin/jboss-cli.sh --echo-command \
 '/subsystem=jgroups/channel=ee:write-attribute(name="stack", value="tcp")',\
 '/interface=public:write-attribute(name=inet-address, value="${jboss.bind.address:0.0.0.0}")' | log; flag=${PIPESTATUS[0]}
 
-###################### Editing eap7-standalone.services
-echo "Adding - After=syslog.target network.target NetworkManager-wait-online.service" | log; flag=${PIPESTATUS[0]}
-sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo "Adding - Wants=NetworkManager-wait-online.service \nBefore=httpd.service" | log; flag=${PIPESTATUS[0]}
-sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
-systemctl daemon-reload
-######################
-
 ####################### Configure the JBoss server and setup eap service
 echo "Setting configurations in $EAP_RPM_CONF_STANDALONE"
 echo -e "\t-> WILDFLY_SERVER_CONFIG=standalone-azure-ha.xml" | log; flag=${PIPESTATUS[0]}
@@ -183,11 +174,21 @@ echo "Start JBoss-EAP service"                  | log; flag=${PIPESTATUS[0]}
 echo "systemctl enable eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl enable eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
 
+####################### 
+
+###################### Editing eap7-standalone.services
+echo "Adding - After=syslog.target network.target NetworkManager-wait-online.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "Adding - Wants=NetworkManager-wait-online.service \nBefore=httpd.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
+systemctl daemon-reload
+
 echo "systemctl restart eap7-standalone.service"| log; flag=${PIPESTATUS[0]}
 systemctl restart eap7-standalone.service       | log; flag=${PIPESTATUS[0]}
 echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
-####################### 
+######################
 
 ####################### Starting cron job
 echo "systemctl restart eap7-standalone.service" >> /bin/jbossservice.sh
