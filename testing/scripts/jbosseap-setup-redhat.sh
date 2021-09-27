@@ -169,13 +169,6 @@ echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.storage_account_name
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.storage_access_key=$STORAGE_ACCESS_KEY\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.container=$CONTAINER_NAME\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 
-echo "editing the eap7-standalone.service After line" | log; flag=${PIPESTATUS[0]}
-sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo "editing the eap7-standalone.service Before and Wants line" | log; flag=${PIPESTATUS[0]}
-sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo -i "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
-systemctl daemon-reload
-
 ####################### Start the JBoss server and setup eap service
 echo "Start JBoss-EAP service"                  | log; flag=${PIPESTATUS[0]}
 echo "systemctl enable eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
@@ -186,6 +179,29 @@ systemctl restart eap7-standalone.service       | log; flag=${PIPESTATUS[0]}
 echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
 ####################### 
+
+####################### Editing the changes
+echo "systemctl stop eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
+systemctl stop eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
+
+echo "Adding - After=syslog.target network.target NetworkManager-wait-online.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "Adding - Wants=NetworkManager-wait-online.service \nBefore=httpd.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
+systemctl daemon-reload
+
+echo "systemctl start eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
+systemctl start eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
+echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
+systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
+
+yum install cronie cronie-anacron | adddate >> jbosseap.install.log 2>&1
+service crond start | log; flag=${PIPESTATUS[0]}
+chkconfig crond on | log; flag=${PIPESTATUS[0]}
+echo "@reboot sleep 90 && /etc/systemd/system/multi-user.target.wants/eap7-standalone.service" >>  /var/spool/cron/root
+chmod 600 /var/spool/cron/root
+#######################
 
 echo "Deploy an application" | log; flag=${PIPESTATUS[0]}
 echo "wget -O eap-session-replication.war $fileUrl" | log; flag=${PIPESTATUS[0]}
