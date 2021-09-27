@@ -190,7 +190,7 @@ systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
 ####################### 
 
 ####################### Starting cron job
-echo "systemctl restart /etc/systemd/system/multi-user.target.wants/eap7-standalone.service" >> /bin/jbossservice.sh
+echo "systemctl restart eap7-standalone.service" >> /bin/jbossservice.sh
 chmod +x /bin/jbossservice.sh
 
 yum install cronie cronie-anacron | log; flag=${PIPESTATUS[0]}
