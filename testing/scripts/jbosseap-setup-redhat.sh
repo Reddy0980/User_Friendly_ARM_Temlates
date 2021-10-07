@@ -188,17 +188,6 @@ echo "systemctl restart eap7-standalone.service"| log; flag=${PIPESTATUS[0]}
 systemctl restart eap7-standalone.service       | log; flag=${PIPESTATUS[0]}
 echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
-######################
-
-####################### Starting cron job
-echo "systemctl restart eap7-standalone.service" >> /bin/jbossservice.sh
-chmod +x /bin/jbossservice.sh
-
-yum install cronie cronie-anacron | log; flag=${PIPESTATUS[0]}
-service crond start | log; flag=${PIPESTATUS[0]}
-chkconfig crond on | log; flag=${PIPESTATUS[0]}
-echo "@reboot sleep 90 && /bin/jbossservice.sh" >>  /var/spool/cron/root
-chmod 600 /var/spool/cron/root
 #######################
 
 echo "Deploy an application" | log; flag=${PIPESTATUS[0]}
