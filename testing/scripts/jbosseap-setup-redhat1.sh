@@ -170,6 +170,13 @@ echo "Start JBoss-EAP service"                  | log; flag=${PIPESTATUS[0]}
 echo "systemctl enable eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl enable eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
 
+echo "Adding - After=syslog.target network.target NetworkManager-wait-online.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "Adding - Wants=NetworkManager-wait-online.service \nBefore=httpd.service" | log; flag=${PIPESTATUS[0]}
+sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
+echo "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
+systemctl daemon-reload
+
 echo "systemctl restart eap7-standalone.service"| log; flag=${PIPESTATUS[0]}
 systemctl restart eap7-standalone.service       | log; flag=${PIPESTATUS[0]}
 echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
