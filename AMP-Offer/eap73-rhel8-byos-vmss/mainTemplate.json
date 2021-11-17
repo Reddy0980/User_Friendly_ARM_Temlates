@@ -116,6 +116,13 @@
         "description": "Select the Replication Strategy for the Storage account"
       }
     },
+    "bootStorageAccountResourceGroup": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Resource group of Boot Diagnostics Storage account"
+      }
+    },
     "virtualNetworkNewOrExisting": {
       "type": "string",
       "defaultValue": "new",
@@ -232,11 +239,11 @@
     "imageReference": {
       "publisher": "redhat",
       "offer": "rhel-byos",
-      "sku": "rhel-lvm84",
+      "sku": "rhel-lvm83",
       "version": "latest"
     },
     "plan": {
-      "name": "rhel-lvm84",
+      "name": "rhel-lvm83",
       "publisher": "redhat",
       "product": "rhel-byos"
     },
