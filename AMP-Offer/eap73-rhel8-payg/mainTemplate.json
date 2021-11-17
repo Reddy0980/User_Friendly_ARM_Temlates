@@ -84,6 +84,13 @@
                 "description": "Storage account kind"
             }
         },
+        "storageAccountResourceGroup": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]",
+            "metadata": {
+                "description": "Resource group of Boot Diagnostics Storage account"
+            }
+        },
         "virtualNetworkNewOrExisting": {
             "defaultValue": "new",
             "type": "String",
@@ -286,7 +293,7 @@
                     "imageReference": {
                         "publisher": "RedHat",
                         "offer": "RHEL",
-                        "sku": "8_4",
+                        "sku": "8_3",
                         "version": "latest"
                     },
                     "osDisk": {
