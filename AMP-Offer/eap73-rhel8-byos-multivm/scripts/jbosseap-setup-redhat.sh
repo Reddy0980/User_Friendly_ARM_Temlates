@@ -41,7 +41,6 @@ done
 
 fileUrl="$artifactsLocation$pathToFile/$fileToDownload$token"
 
-private_ip=$(hostname -I)
 JBOSS_EAP_USER=$9
 JBOSS_EAP_PASSWORD=${10}
 RHSM_USER=${11}
@@ -54,7 +53,7 @@ RHEL_POOL=${17} # kept at the end because it is possible that customer won't pro
 IP_ADDR=$(hostname -I)
 
 echo "JBoss EAP admin user: " ${JBOSS_EAP_USER} | log; flag=${PIPESTATUS[0]}
-echo "JBoss EAP on RHEL version you selected : JBoss-EAP7.4-on-RHEL8.4" | log; flag=${PIPESTATUS[0]}
+echo "JBoss EAP on RHEL version you selected : JBoss-EAP7.3-on-RHEL8.0" | log; flag=${PIPESTATUS[0]}
 echo "Storage Account Name: " ${STORAGE_ACCOUNT_NAME} | log; flag=${PIPESTATUS[0]}
 echo "Storage Container Name: " ${CONTAINER_NAME} | log; flag=${PIPESTATUS[0]}
 echo "RHSM_USER: " ${RHSM_USER} | log; flag=${PIPESTATUS[0]}
@@ -108,19 +107,19 @@ fi
 #######################
 
 
-####################### Install openjdk: is it needed? it should be installed with eap7.4
+####################### Install openjdk: is it needed? it should be installed with eap7.3
 echo "Install openjdk, wget, git, unzip, vim" | log; flag=${PIPESTATUS[0]}
-echo "sudo yum install java-1.8.4-openjdk wget unzip vim git -y" | log; flag=${PIPESTATUS[0]}
+echo "sudo yum install java-1.8.0-openjdk wget unzip vim git -y" | log; flag=${PIPESTATUS[0]}
 sudo yum install wget unzip vim git -y | log; flag=${PIPESTATUS[0]}
 ####################### 
 
 
-####################### Install JBoss EAP 7.4
-echo "subscription-manager repos --enable=jb-eap-7.4-for-rhel-8-x86_64-rpms" | log; flag=${PIPESTATUS[0]}
-subscription-manager repos --enable=jb-eap-7.4-for-rhel-8-x86_64-rpms | log; flag=${PIPESTATUS[0]}
+####################### Install JBoss EAP 7.3
+echo "subscription-manager repos --enable=jb-eap-7.3-for-rhel-8-x86_64-rpms" | log; flag=${PIPESTATUS[0]}
+subscription-manager repos --enable=jb-eap-7.3-for-rhel-8-x86_64-rpms | log; flag=${PIPESTATUS[0]}
 if [ $flag != 0 ] ; then echo  "ERROR! Enabling repos for JBoss EAP Failed" >&2 log; exit $flag;  fi
 
-echo "Installing JBoss EAP 7.4 repos" | log; flag=${PIPESTATUS[0]}
+echo "Installing JBoss EAP 7.3 repos" | log; flag=${PIPESTATUS[0]}
 echo "yum groupinstall -y jboss-eap7" | log; flag=${PIPESTATUS[0]}
 yum groupinstall -y jboss-eap7        | log; flag=${PIPESTATUS[0]}
 if [ $flag != 0 ] ; then echo  "ERROR! JBoss EAP installation Failed" >&2 log; exit $flag;  fi
@@ -156,11 +155,11 @@ echo 'WILDFLY_SERVER_CONFIG=standalone-azure-ha.xml' >> $EAP_RPM_CONF_STANDALONE
 echo "Setting configurations in $EAP_LAUNCH_CONFIG"
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address=0.0.0.0" | log; flag=${PIPESTATUS[0]}
 echo -e "\t-> JAVA_OPTS=$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0" | log; flag=${PIPESTATUS[0]}
-echo -e "\t-> JAVA_OPTS=\"\$JAVA_OPTS -Djboss.bind.address.private=$private_ip\"" | log; flag=${PIPESTATUS[0]}
+echo -e '\t-> JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(hostname -I)"' | log; flag=${PIPESTATUS[0]}
 
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management=0.0.0.0"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
-echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.bind.address.private=$private_ip\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
+echo -e 'JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.private=$(hostname -I)"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 echo -e 'JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true"' >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
 
 echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.storage_account_name=$STORAGE_ACCOUNT_NAME\"" >> $EAP_LAUNCH_CONFIG | log; flag=${PIPESTATUS[0]}
@@ -170,32 +169,12 @@ echo -e "JAVA_OPTS=\"\$JAVA_OPTS -Djboss.jgroups.azure_ping.container=$CONTAINER
 echo "Start JBoss-EAP service"                  | log; flag=${PIPESTATUS[0]}
 echo "systemctl enable eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl enable eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
-####################### 
-
-###################### Editing eap7-standalone.services and adding the following lines
-echo "Adding - After=syslog.target network.target NetworkManager-wait-online.service" | log; flag=${PIPESTATUS[0]}
-sed -i 's/After=syslog.target network.target/After=syslog.target network.target NetworkManager-wait-online.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo "Adding - Wants=NetworkManager-wait-online.service \nBefore=httpd.service" | log; flag=${PIPESTATUS[0]}
-sed -i 's/Before=httpd.service/Wants=NetworkManager-wait-online.service \nBefore=httpd.service/' /etc/systemd/system/multi-user.target.wants/eap7-standalone.service
-echo "systemctl daemon-reload" | log; flag=${PIPESTATUS[0]}
-systemctl daemon-reload
 
 echo "systemctl restart eap7-standalone.service"| log; flag=${PIPESTATUS[0]}
 systemctl restart eap7-standalone.service       | log; flag=${PIPESTATUS[0]}
 echo "systemctl status eap7-standalone.service" | log; flag=${PIPESTATUS[0]}
 systemctl status eap7-standalone.service        | log; flag=${PIPESTATUS[0]}
-######################
-
-####################### Starting cron job
-echo "systemctl restart eap7-standalone.service" >> /bin/jbossservice.sh
-chmod +x /bin/jbossservice.sh
-
-yum install cronie cronie-anacron | log; flag=${PIPESTATUS[0]}
-service crond start | log; flag=${PIPESTATUS[0]}
-chkconfig crond on | log; flag=${PIPESTATUS[0]}
-echo "@reboot sleep 90 && /bin/jbossservice.sh" >>  /var/spool/cron/root
-chmod 600 /var/spool/cron/root
-#######################
+####################### 
 
 echo "Deploy an application" | log; flag=${PIPESTATUS[0]}
 echo "wget -O eap-session-replication.war $fileUrl" | log; flag=${PIPESTATUS[0]}
