@@ -7,15 +7,22 @@ $host.ui.RawUI.WindowTitle = "Parsec Cloud Preparation Tool"
 
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" 
 
+$logsfolder = "C:\logs"
+$logoutput = $logsfolder + '\setup-output-' + (get-date).ToString('MMddyyhhmmss') + '.txt'
+New-Item -Path $logsfolder -ItemType directory -Force
+
 Function ProgressWriter {
     param (
     [int]$percentcomplete,
     [string]$status
     )
+    $output = "$MessageTime - $percentcomplete - $status"
     Write-Progress -Activity "Setting Up Your Machine" -Status $status -PercentComplete $PercentComplete
-    }
+    Add-Content -Path $logoutput -Value $output
+}
 
-$path = [Environment]::GetFolderPath("Desktop")
+#$path = [Environment]::GetFolderPath("Desktop")
+$path = "C:"
 $currentusersid = Get-LocalUser "$env:USERNAME" | Select-Object SID | ft -HideTableHeaders | Out-String | ForEach-Object { $_.Trim() }
 
 #Creating Folders and moving script files into System directories
@@ -37,7 +44,6 @@ function setupEnvironment {
     if((Test-Path $env:ProgramData\ParsecLoader\ShowDialog.ps1) -eq $true) {} Else {Move-Item -Path $path\ParsecTemp\PreInstall\ShowDialog.ps1 -Destination $env:ProgramData\ParsecLoader}
     if((Test-Path $env:ProgramData\ParsecLoader\OneHour.ps1) -eq $true) {} Else {Move-Item -Path $path\ParsecTemp\PreInstall\OneHour.ps1 -Destination $env:ProgramData\ParsecLoader}
     if((Test-Path $env:ProgramData\ParsecLoader\TeamMachineSetup.ps1) -eq $true) {} Else {Move-Item -Path $path\ParsecTemp\PreInstall\TeamMachineSetup.ps1 -Destination $env:ProgramData\ParsecLoader}
-    if((Test-Path $env:ProgramData\ParsecLoader\parsecpublic.cer) -eq $true) {} Else {Move-Item -Path $path\ParsecTemp\PreInstall\parsecpublic.cer -Destination $env:ProgramData\ParsecLoader}
     }
 
 function cloudprovider { 
@@ -67,7 +73,7 @@ function cloudprovider {
                     )
 
     $azure = $(
-                  Try {(Invoke-Webrequest -Headers @{"Metadata"="true"} -Uri "http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-01-01&format=text" -TimeoutSec 5)}
+                  Try {(Invoke-WebRequest -Uri "http://169.254.169.254/metadata/instance?api-version=2018-10-01" -Headers @{Metadata="true"} -TimeoutSec 5)}
                   catch {}              
                )
 
@@ -446,6 +452,13 @@ function create-directories {
     if((Test-Path -Path C:\ParsecTemp\Apps) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Apps -ItemType directory | Out-Null}
     if((Test-Path -Path C:\ParsecTemp\DirectX) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\DirectX -ItemType directory | Out-Null}
     if((Test-Path -Path C:\ParsecTemp\Drivers) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Drivers -ItemType Directory | Out-Null}
+    if((Test-Path -Path C:\ParsecTemp\Devcon) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Devcon -ItemType Directory | Out-Null}
+    }
+
+    #Create ParsecTemp folder in C Drive
+function unzip-preinstall {
+    ProgressWriter -Status "Creating Directories (C:\ParsecTemp)" -PercentComplete $PercentComplete
+    7z x ".\PreInstall.zip" "-oC:\ParsecTemp\PreInstall" -bd
     }
 
 #disable IE security
@@ -458,18 +471,20 @@ function disable-iesecurity {
 
 #download-files-S3
 function download-resources {
-    ProgressWriter -Status "Downloading DirectX June 2010 Redist" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe", "C:\ParsecTemp\Apps\directx_Jun2010_redist.exe") 
+    $ProgressPreference = 'SilentlyContinue'
+
+    #ProgressWriter -Status "Downloading DirectX June 2010 Redist" -PercentComplete $PercentComplete
+    #Invoke-WebRequest -Uri "https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe" -OutFile "C:\ParsecTemp\Apps\directx_Jun2010_redist.exe"
+    ProgressWriter -Status "Downloading Devcon" -PercentComplete $PercentComplete
+    Invoke-WebRequest -Uri "https://s3.amazonaws.com/parsec-files-ami-setup/Devcon/devcon.exe" -OutFile "C:\ParsecTemp\Devcon\devcon.exe"
     ProgressWriter -Status "Downloading Parsec" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://builds.parsecgaming.com/package/parsec-windows.exe", "C:\ParsecTemp\Apps\parsec-windows.exe")
-    ProgressWriter -Status "Downloading Parsec Virtual Display Driver" -percentcomplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://builds.parsec.app/vdd/parsec-vdd-0.37.0.0.exe", "C:\ParsecTemp\Apps\parsec-vdd.exe")
+    Invoke-WebRequest -Uri "https://builds.parsecgaming.com/package/parsec-windows.exe" -OutFile "C:\ParsecTemp\Apps\parsec-windows.exe"
     ProgressWriter -Status "Downloading GPU Updater" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/parseccloud/image/parsec+desktop.png", "C:\ParsecTemp\parsec+desktop.png")
-    (New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/parseccloud/image/white_ico_agc_icon.ico", "C:\ParsecTemp\white_ico_agc_icon.ico")
-    (New-Object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/parsec-cloud/Cloud-GPU-Updater/master/GPUUpdaterTool.ps1", "$env:ProgramData\ParsecLoader\GPUUpdaterTool.ps1")
-    ProgressWriter -Status "Downloading Google Chrome" -PercentComplete $PercentComplete
-    (New-Object System.Net.WebClient).DownloadFile("https://dl.google.com/tag/s/dl/chrome/install/googlechromestandaloneenterprise64.msi", "C:\ParsecTemp\Apps\googlechromestandaloneenterprise64.msi")
+    Invoke-WebRequest -Uri "https://s3.amazonaws.com/parseccloud/image/parsec+desktop.png" -OutFile "C:\ParsecTemp\parsec+desktop.png"
+    Invoke-WebRequest -Uri "https://s3.amazonaws.com/parseccloud/image/white_ico_agc_icon.ico" -OutFile "C:\ParsecTemp\white_ico_agc_icon.ico"
+    #Invoke-WebRequest -Uri "https://raw.githubusercontent.com/parsec-cloud/Cloud-GPU-Updater/master/GPUUpdaterTool.ps1" -OutFile "$env:ProgramData\ParsecLoader\GPUUpdaterTool.ps1"
+    #ProgressWriter -Status "Downloading Google Chrome" -PercentComplete $PercentComplete
+    #Invoke-WebRequest -Uri "https://dl.google.com/tag/s/dl/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "C:\ParsecTemp\Apps\googlechromestandaloneenterprise64.msi"
     }
 
 #install-base-files-silently
@@ -626,10 +641,10 @@ function disable-lock {
 #set wallpaper
 function set-wallpaper {
     ProgressWriter -Status "Setting the Parsec logo ass the computer wallpaper" -PercentComplete $PercentComplete
-    if((Test-Path -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System) -eq $true) {} Else {New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies" -Name "System" | Out-Null}
-    if((Test-RegistryValue -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -value Wallpaper) -eq $true) {Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name Wallpaper -value "C:\ParsecTemp\parsec+desktop.png" | Out-Null} Else {New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name Wallpaper -PropertyType String -value "C:\ParsecTemp\parsec+desktop.png" | Out-Null}
-    if((Test-RegistryValue -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -value WallpaperStyle) -eq $true) {Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name WallpaperStyle -value 2 | Out-Null} Else {New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name WallpaperStyle -PropertyType String -value 2 | Out-Null}
-    Stop-Process -ProcessName explorer
+    New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies" -Name "System" | Out-Null
+    New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name Wallpaper -PropertyType String -value "C:\ParsecTemp\parsec+desktop.png" | Out-Null
+    New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name WallpaperStyle -PropertyType String -value 2 | Out-Null
+    #Stop-Process -ProcessName explorer
     }
 
 #disable recent start menu items
@@ -642,7 +657,7 @@ function disable-recent-start-menu {
 function Create-AutoShutdown-Shortcut{
     ProgressWriter -Status "Creating auto shutdown shortcut" -PercentComplete $PercentComplete
     $Shell = New-Object -ComObject ("WScript.Shell")
-    $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Setup Auto Shutdown.lnk")
+    $ShortCut = $Shell.CreateShortcut("$env:PUBLIC\Desktop\Setup Auto Shutdown.lnk")
     $ShortCut.TargetPath="powershell.exe"
     $ShortCut.Arguments='-ExecutionPolicy Bypass -File "C:\ProgramData\ParsecLoader\CreateAutomaticShutdownScheduledTask.ps1"'
     $ShortCut.WorkingDirectory = "$env:ProgramData\ParsecLoader";
@@ -655,7 +670,7 @@ function Create-AutoShutdown-Shortcut{
 function Create-One-Hour-Warning-Shortcut{
     ProgressWriter -Status "Creating one hour warning shortcut" -PercentComplete $PercentComplete
     $Shell = New-Object -ComObject ("WScript.Shell")
-    $ShortCut = $Shell.CreateShortcut("$env:USERPROFILE\Desktop\Setup One Hour Warning.lnk")
+    $ShortCut = $Shell.CreateShortcut("$env:PUBLIC\Desktop\Setup One Hour Warning.lnk")
     $ShortCut.TargetPath="powershell.exe"
     $ShortCut.Arguments='-ExecutionPolicy Bypass -File "C:\ProgramData\ParsecLoader\CreateOneHourWarningScheduledTask.ps1"'
     $ShortCut.WorkingDirectory = "$env:ProgramData\ParsecLoader";
@@ -664,6 +679,10 @@ function Create-One-Hour-Warning-Shortcut{
     $ShortCut.Save()
     }
 
+#create shortcut for electron app
+#function create-shortcut-app {
+#    Copy-Item -Path $path\ParsecTemp\PostInstall\Parsec.lnk -Destination $path
+#    }
 
 #Disables Server Manager opening on Startup
 function disable-server-manager {
@@ -676,7 +695,7 @@ function clean-aws {
     remove-item -path "$path\EC2 Feedback.Website"
     Remove-Item -Path "$path\EC2 Microsoft Windows Guide.website"
     }
-<#
+
 #Move extracts Razer Surround Files into correct location
 Function ExtractRazerAudio {
     cmd.exe /c '"C:\Program Files\7-Zip\7z.exe" x C:\ParsecTemp\Apps\razer-surround-driver.exe -oC:\ParsecTemp\Apps\razer-surround-driver -y' | Out-Null
@@ -687,12 +706,11 @@ Function ModidifyManifest {
     $InstallerManifest = 'C:\ParsecTemp\Apps\razer-surround-driver\$TEMP\RazerSurroundInstaller\InstallerManifest.xml'
     $regex = '(?<=<SilentMode>)[^<]*'
     (Get-Content $InstallerManifest) -replace $regex, 'true' | Set-Content $InstallerManifest -Encoding UTF8
-#>
+    }
 
  #Audio Driver Install
 function AudioInstall {
-<#
-    (New-Object System.Net.WebClient).DownloadFile("http://rzr.to/surround-pc-download", "C:\ParsecTemp\Apps\razer-surround-driver.exe")
+    Invoke-WebRequest -Uri "http://rzr.to/surround-pc-download" -OutFile "C:\ParsecTemp\Apps\razer-surround-driver.exe"
     ExtractRazerAudio
     ModidifyManifest
     $OriginalLocation = Get-Location
@@ -700,25 +718,11 @@ function AudioInstall {
     Start-Process RzUpdateManager.exe
     Set-Location $OriginalLocation
     Set-Service -Name audiosrv -StartupType Automatic
-    #>
-    (New-Object System.Net.WebClient).DownloadFile("https://download.vb-audio.com/Download_CABLE/VBCABLE_Driver_Pack43.zip", "C:\ParsecTemp\Apps\VBCable.zip")
-    New-Item -Path "C:\ParsecTemp\Apps\VBCable" -ItemType Directory| Out-Null
-    Expand-Archive -Path "C:\ParsecTemp\Apps\VBCable.zip" -DestinationPath "C:\ParsecTemp\Apps\VBCable"
-    $pathToCatFile = "C:\ParsecTemp\Apps\VBCable\vbaudio_cable64_win7.cat"
-    $FullCertificateExportPath = "C:\ParsecTemp\Apps\VBCable\VBCert.cer"
-    $VB = @{}
-    $VB.DriverFile = $pathToCatFile;
-    $VB.CertName = $FullCertificateExportPath;
-    $VB.ExportType = [System.Security.Cryptography.X509Certificates.X509ContentType]::Cert;
-    $VB.Cert = (Get-AuthenticodeSignature -filepath $VB.DriverFile).SignerCertificate;
-    [System.IO.File]::WriteAllBytes($VB.CertName, $VB.Cert.Export($VB.ExportType))
-    Import-Certificate -CertStoreLocation Cert:\LocalMachine\TrustedPublisher -FilePath $VB.CertName | Out-Null
-    Start-Process -FilePath "C:\ParsecTemp\Apps\VBCable\VBCABLE_Setup_x64.exe" -ArgumentList '-i','-h'
     }
 
 #Creates shortcut for the GPU Updater tool
 function gpu-update-shortcut {
-    (New-Object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/parsec-cloud/Cloud-GPU-Updater/master/GPUUpdaterTool.ps1", "$env:ProgramData\ParsecLoader\GPUUpdaterTool.ps1")
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/parsec-cloud/Cloud-GPU-Updater/master/GPUUpdaterTool.ps1" -OutFile "$env:ProgramData\ParsecLoader\GPUUpdaterTool.ps1"
     Unblock-File -Path "$env:ProgramData\ParsecLoader\GPUUpdaterTool.ps1"
     ProgressWriter -Status "Creating GPU Updater icon on Desktop" -PercentComplete $PercentComplete
     $Shell = New-Object -ComObject ("WScript.Shell")
@@ -734,9 +738,9 @@ function gpu-update-shortcut {
 
 #Provider specific driver install and setup
 Function provider-specific {
-    ProgressWriter -Status "Installing VB CAble Audio Driver if required and removing system information from appearing on Google Cloud Desktops" -PercentComplete $PercentComplete
+    ProgressWriter -Status "Installing Audio Driver if required and removing system information from appearing on Google Cloud Desktops" -PercentComplete $PercentComplete
     #Device ID Query 
-    $gputype = Get-PnpDevice | Where-Object {($_.DeviceID -like 'PCI\VEN_10DE*' -or $_.DeviceID -like '*PCI\VEN_1002*') -and ($_.PNPClass -eq 'Display' -or $_.Name -like '*Video Controller')} | Select-Object InstanceID -ExpandProperty InstanceID
+    $gputype = get-wmiobject -query "select DeviceID from Win32_PNPEntity Where (deviceid Like '%PCI\\VEN_10DE%') and (PNPClass = 'Display' or Name = '3D Video Controller')" | Select-Object DeviceID -ExpandProperty DeviceID
     if ($gputype -eq $null) {
         }
     Else {
@@ -776,10 +780,6 @@ Function provider-specific {
             #Quadro M2000
             AudioInstall
             }
-        Elseif($gputype.substring(13,8) -eq "DEV_7362") {
-            #AMD V520
-            AudioInstall
-        }
         Else {
             }
         }
@@ -788,63 +788,93 @@ Function provider-specific {
 #7Zip is required to extract the Parsec-Windows.exe File
 function Install7Zip {
     $url = Invoke-WebRequest -Uri https://www.7-zip.org/download.html
-    (New-Object System.Net.WebClient).DownloadFile("https://www.7-zip.org/$($($($url.Links | Where-Object outertext -Like "Download")[1]).OuterHTML.split('"')[1])" ,"C:\ParsecTemp\Apps\7zip.exe")
+    Invoke-WebRequest "https://www.7-zip.org/$($($($url.Links | Where-Object outertext -Like "Download")[1]).OuterHTML.split('"')[1])" -OutFile "C:\ParsecTemp\Apps\7zip.exe"
     Start-Process C:\ParsecTemp\Apps\7zip.exe -ArgumentList '/S /D="C:\Program Files\7-Zip"' -Wait
     }
 
+#Move Parsec Files into correct location
+#Function ExtractInstallFiles {
+#    cmd.exe /c '"C:\Program Files\7-Zip\7z.exe" x C:\ParsecTemp\Apps\parsec-windows.exe -oC:\ParsecTemp\Apps\Parsec-Windows -y' | Out-Null
+#    if((Test-Path -Path 'C:\Program Files\Parsec')-eq $true) {} Else {New-Item -Path 'C:\Program Files\Parsec' -ItemType Directory | Out-Null}
+#    if((Test-Path -Path "C:\Program Files\Parsec\skel") -eq $true) {} Else {Move-Item -Path C:\ParsecTemp\Apps\Parsec-Windows\skel -Destination 'C:\Program Files\Parsec' | Out-Null} 
+#    if((Test-Path -Path "C:\Program Files\Parsec\vigem") -eq $true) {} Else  {Move-Item -Path C:\ParsecTemp\Apps\Parsec-Windows\vigem -Destination 'C:\Program Files\Parsec' | Out-Null} 
+#    if((Test-Path -Path "C:\Program Files\Parsec\wscripts") -eq $true) {} Else  {Move-Item -Path C:\ParsecTemp\Apps\Parsec-Windows\wscripts -Destination 'C:\Program Files\Parsec' | Out-Null} 
+#    if((Test-Path -Path "C:\Program Files\Parsec\parsecd.exe") -eq $true) {} Else {Move-Item -Path C:\ParsecTemp\Apps\Parsec-Windows\parsecd.exe -Destination 'C:\Program Files\Parsec' | Out-Null} 
+#    if((Test-Path -Path "C:\Program Files\Parsec\pservice.exe") -eq $true) {} Else {Move-Item -Path C:\ParsecTemp\Apps\Parsec-Windows\pservice.exe -Destination 'C:\Program Files\Parsec' | Out-Null} 
+#    Start-Sleep 1
+#    }
+
+#Checks for Server 2019 and asks user to install Windows Xbox Accessories in order to let their controller work
 Function Server2019Controller {
     ProgressWriter -Status "Adding Xbox 360 Controller driver to Windows Server 2019" -PercentComplete $PercentComplete
     if ((gwmi win32_operatingsystem | % caption) -like '*Windows Server 2019*') {
-        (New-Object System.Net.WebClient).DownloadFile("http://www.download.windowsupdate.com/msdownload/update/v3-19990518/cabpool/2060_8edb3031ef495d4e4247e51dcb11bef24d2c4da7.cab", "C:\ParsecTemp\Drivers\Xbox360_64Eng.cab")
+        Invoke-WebRequest -Uri "http://www.download.windowsupdate.com/msdownload/update/v3-19990518/cabpool/2060_8edb3031ef495d4e4247e51dcb11bef24d2c4da7.cab" -OutFile "C:\ParsecTemp\Drivers\Xbox360_64Eng.cab"
         if((Test-Path -Path C:\ParsecTemp\Drivers\Xbox360_64Eng) -eq $true) {} Else {New-Item -Path C:\ParsecTemp\Drivers\Xbox360_64Eng -ItemType directory | Out-Null}
         cmd.exe /c "C:\Windows\System32\expand.exe C:\ParsecTemp\Drivers\Xbox360_64Eng.cab -F:* C:\ParsecTemp\Drivers\Xbox360_64Eng" | Out-Null
         cmd.exe /c '"C:\Program Files\Parsec\vigem\10\x64\devcon.exe" dp_add "C:\ParsecTemp\Drivers\Xbox360_64Eng\xusb21.inf"' | Out-Null
         }
     }
 
+#Function InstallViGEmBus {
+    #Required for Controller Support.
+    #$Vigem = @{}
+    #$Vigem.DriverFile = "C:\Program Files\Parsec\Vigem\ViGEmBus.cat";
+    #$Vigem.CertName = 'C:\Program Files\Parsec\Vigem\Wohlfeil_IT_e_U_.cer';
+    #$Vigem.ExportType = [System.Security.Cryptography.X509Certificates.X509ContentType]::Cert;
+    #$Vigem.Cert = (Get-AuthenticodeSignature -filepath $vigem.DriverFile).SignerCertificate; 
+    #$Vigem.CertInstalled = if ((Get-ChildItem -Path Cert:\CurrentUser\TrustedPublisher | Where-Object Subject -Like "*CN=Wohlfeil.IT e.U., O=Wohlfeil.IT e.U.*" ) -ne $null) {$True}
+    #Else {$false}
+    #if ($vigem.CertInstalled -eq $true) {
+    #cmd.exe /c '"C:\Program Files\Parsec\vigem\10\x64\devcon.exe" install "C:\Program Files\Parsec\vigem\10\ViGEmBus.inf" Nefarius\ViGEmBus\Gen1' | Out-Null
+    #} 
+    #Else {[System.IO.File]::WriteAllBytes($Vigem.CertName, $Vigem.Cert.Export($Vigem.ExportType));
+    #Import-Certificate -CertStoreLocation Cert:\LocalMachine\TrustedPublisher -FilePath 'C:\Program Files\Parsec\Vigem\Wohlfeil_IT_e_U_.cer' | Out-Null
+    #Start-Sleep 5
+    #cmd.exe /c '"C:\Program Files\Parsec\vigem\devcon.exe" install "C:\Program Files\Parsec\vigem\ViGEmBus.inf" Root\ViGEmBus' | Out-Null
+    #}
+    #}
+
+#Creates Parsec Firewall Rule in Windows Firewall
+#Function CreateFireWallRule {
+#    New-NetFirewallRule -DisplayName "Parsec" -Direction Inbound -Program "C:\Program Files\Parsec\Parsecd.exe" -Profile Private,Public -Action Allow -Enabled True | Out-Null
+#    }
+
+#Creates Parsec Service
+#Function CreateParsecService {
+#    cmd.exe /c 'sc.exe Create "Parsec" binPath= "\"C:\Program Files\Parsec\pservice.exe\"" start= "auto"' | Out-Null
+#    sc.exe Start 'Parsec' | Out-Null
+#    }
+
+
 Function InstallParsec {
     Start-Process "C:\ParsecTemp\Apps\parsec-windows.exe" -ArgumentList "/silent", "/shared" -wait
+#    ExtractInstallFiles
+#    InstallViGEmBus
+#    CreateFireWallRule
+#    CreateParsecService
+#    create-shortcut-app
     }
-
-Function InstallParsecVDD {
-    ProgressWriter -Status "Installing Parsec Virtual Display Driver" -PercentComplete $PercentComplete
-    Import-Certificate -CertStoreLocation "Cert:\LocalMachine\TrustedPublisher" -FilePath "$env:ProgramData\ParsecLoader\parsecpublic.cer" | Out-Null
-    Start-Process "C:\ParsecTemp\Apps\parsec-vdd.exe" -ArgumentList "/silent" 
-    $iterator = 0    
-    do {
-        Start-Sleep -s 2
-        $iterator++
-        }
-    Until (($null -ne ((Get-PnpDevice | Where-Object {$_.Name -eq "Parsec Virtual Display Adapter"}).DeviceID)) -or ($iterator -gt 7))
-    if (Get-process -name parsec-vdd -ErrorAction SilentlyContinue) {
-        Stop-Process -name parsec-vdd -Force
-        }
-    $configfile = Get-Content C:\ProgramData\Parsec\config.txt
-    $configfile += "host_virtual_monitors = 1"
-    $configfile += "host_privacy_mode = 1"
-    $configfile | Out-File C:\ProgramData\Parsec\config.txt -Encoding ascii
-}
 
 #Apps that require human intervention
 function Install-Gaming-Apps {
     ProgressWriter -Status "Installing Parsec, ViGEm https://github.com/ViGEm/ViGEmBus and 7Zip" -PercentComplete $PercentComplete
-    Install7Zip
+    #Install7Zip
     InstallParsec
     #if((Test-RegistryValue -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -value "Parsec.App.0") -eq $true) {Set-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "Parsec.App.0" -Value "C:\Program Files\Parsec\parsecd.exe" | Out-Null} Else {New-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Run -Name "Parsec.App.0" -Value "C:\Program Files\Parsec\parsecd.exe" | Out-Null}
-    Start-Process -FilePath "C:\Program Files\Parsec\parsecd.exe"
+    #Start-Process -FilePath "C:\Program Files\Parsec\parsecd.exe"
     Start-Sleep -s 1
     }
 
 #Disable Devices
 function disable-devices {
     ProgressWriter -Status "Disabling Microsoft Basic Display Adapter, Generic Non PNP Monitor and other devices" -PercentComplete $PercentComplete
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "HDAUDIO\FUNC_01&VEN_10DE&DEV_0083&SUBSYS_10DE11A3*"'
+    Start-Process -FilePath "C:\ParsecTemp\Devcon\devcon.exe" -ArgumentList '/r disable "HDAUDIO\FUNC_01&VEN_10DE&DEV_0083&SUBSYS_10DE11A3*"'
     Get-PnpDevice | where {$_.friendlyname -like "Generic Non-PNP Monitor" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
     Get-PnpDevice | where {$_.friendlyname -like "Microsoft Basic Display Adapter" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
     Get-PnpDevice | where {$_.friendlyname -like "Google Graphics Array (GGA)" -and $_.status -eq "OK"} | Disable-PnpDevice -confirm:$false
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1013&DEV_00B8*"'
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1D0F&DEV_1111*"'
-    Start-Process -FilePath "C:\Program Files\Parsec\vigem\10\x64\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1AE0&DEV_A002*"'
+    Start-Process -FilePath "C:\ParsecTemp\Devcon\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1013&DEV_00B8*"'
+    Start-Process -FilePath "C:\ParsecTemp\Devcon\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1D0F&DEV_1111*"'
+    Start-Process -FilePath "C:\ParsecTemp\Devcon\devcon.exe" -ArgumentList '/r disable "PCI\VEN_1AE0&DEV_A002*"'
     }
 
 #Cleanup
@@ -860,6 +890,20 @@ function clean-up-recent {
     remove-item "$env:AppData\Microsoft\Windows\Recent\*" -Recurse -Force | Out-Null
     }
 
+#stopping all parsec services
+function stop-parsec {
+    ProgressWriter -Status "Stopping all Parsec Services and restarting" -PercentComplete $PercentComplete
+    Stop-Process -Name pservice -Force
+    Stop-Process -Name parsecd -Force
+
+    Start-Service -Name Parsec
+}
+
+function register-team-computer {
+  ProgressWriter -Status "Registering Team Computer" -PercentComplete $PercentComplete
+  Start-Process powershell.exe -argument "-file $env:ProgramData\ParsecLoader\TeamMachineSetup.ps1" -Wait
+}
+    
 #Start GPU Update Tool
 Function StartGPUUpdate {
     param(
@@ -925,34 +969,36 @@ Write-Host -foregroundcolor red "
 "   
 #PromptUserAutoLogon -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
 $ScripttaskList = @(
+"unzip-preinstall";
 "setupEnvironment";
 "addRegItems";
 "create-directories";
 "disable-iesecurity";
 "download-resources";
-"install-windows-features";
+#"install-windows-features";
 "force-close-apps";
 "disable-network-window";
 "disable-logout";
 "disable-lock";
-"show-hidden-items";
-"show-file-extensions";
-"enhance-pointer-precision";
-"enable-mousekeys";
+#"show-hidden-items";
+#"show-file-extensions";
+#"enhance-pointer-precision";
+#"enable-mousekeys";
 "set-time";
-"set-wallpaper";
+#"set-wallpaper";
 "Create-AutoShutdown-Shortcut";
 "Create-One-Hour-Warning-Shortcut";
-"disable-server-manager";
+#"disable-server-manager";
 "Install-Gaming-Apps";
-"disable-devices";
-"InstallParsecVDD";
 "Server2019Controller";
-"gpu-update-shortcut";
-"clean-up";
-"clean-up-recent";
+#"gpu-update-shortcut";
+"disable-devices";
+#"clean-up";
+#"clean-up-recent";
 "provider-specific";
-"TeamMachineSetupScheduledTask"
+# "TeamMachineSetupScheduledTask";
+"register-team-computer";
+"stop-parsec"
 )
 
 foreach ($func in $ScripttaskList) {
@@ -960,13 +1006,11 @@ foreach ($func in $ScripttaskList) {
     & $func $PercentComplete
     }
 
-StartGPUUpdate -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
-Start-ScheduledTask -TaskName "Setup Team Machine"
+#StartGPUUpdate -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
 ProgressWriter -status "Done" -percentcomplete 100
-Write-Host "1. Open Parsec and sign in (Team machines should have automatically signed in if userdata was correct)" -ForegroundColor black -BackgroundColor Green 
+Write-Host "1. Open Parsec and sign in" -ForegroundColor black -BackgroundColor Green 
 Write-Host "2. Use GPU Updater to update your GPU Drivers!" -ForegroundColor black -BackgroundColor Green 
-#Write-Host "You don't need to sign into Razer Synapse, the login box will stop appearing after a couple of reboots" -ForegroundColor black -BackgroundColor Green 
+Write-Host "You don't need to sign into Razer Synapse, the login box will stop appearing after a couple of reboots" -ForegroundColor black -BackgroundColor Green 
 Write-Host "You may want to change your Windows password to something simpler if the password your cloud provider gave you is super long" -ForegroundColor black -BackgroundColor Green 
-Write-host "DONE!" -ForegroundColor black -BackgroundColor Green
-if ($DontPromptPasswordUpdateGPU) {} 
-Else {pause}
+Write-host "DONE!" -ForegroundColor black -BackgroundColor Green 
+#pause
