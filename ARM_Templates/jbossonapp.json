@@ -48,7 +48,7 @@
             "defaultValue": "0"
         },
         "zoneRedundant": {
-            "type": "bool",
+            "type": "string",
             "defaultValue": false
         },
         "virtualNetworkAddress": {
