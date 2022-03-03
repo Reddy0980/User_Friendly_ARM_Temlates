@@ -94,7 +94,7 @@
             "defaultValue": 2
         },
         "zones": {
-            "type": "array",
+            "type": "string",
             "defaultValue": []
         },
         "publicIpAddressName": {
