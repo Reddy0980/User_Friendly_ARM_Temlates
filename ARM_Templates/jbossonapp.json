@@ -29,21 +29,9 @@
             "type": "string",
             "defaultValue": "JBOSSEAP|7-java11"
         },
-        "virtualNetworkName": {
-            "type": "string",
-            "defaultValue": "ilb-ase-vnet"
-        },
         "location": {
             "type": "string",
             "defaultValue": "eastus"
-        },
-        "dedicatedHostCount": {
-            "type": "string",
-            "defaultValue": "0"
-        },
-        "zoneRedundant": {
-            "type": "string",
-            "defaultValue": false
         },
         "virtualNetworkAddress": {
             "type": "string",
@@ -73,8 +61,6 @@
             "type": "int",
             "defaultValue": 3
         },
-
-
         "tier": {
             "type": "string",
             "defaultValue": "Standard_v2"
@@ -87,10 +73,6 @@
             "type": "int",
             "defaultValue": 2
         },
-        "zones": {
-            "type": "string",
-            "defaultValue": []
-        },
         "publicIpAddressName": {
             "type": "string",
             "defaultValue": "public-ip-address"
@@ -102,18 +84,15 @@
         "allocationMethod": {
             "type": "string",
             "defaultValue": "Static"
-        },
-        "publicIpZones": {
-            "type": "array",
-            "defaultValue": []
         }
     },
     "variables": {
         "aseName": "[concat(parameters('webAppName'),'-ilb-ase')]",
+        "virtualNetworkName": "ilb-ase-vnet",
         "hostingPlanName": "[concat(parameters('webAppName'),'-plan')]",
         "privateZoneName": "[concat(variables('aseName'),'.appserviceenvironment.net')]",
-        "virtualNetworkId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('aseSubnetName'))]",
+        "virtualNetworkId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+        "subnetId": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), parameters('aseSubnetName'))]",
         "hostingEnvironmentProfile": {
             "id": "[resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/hostingEnvironments', variables('aseName'))]"
         },
@@ -127,7 +106,7 @@
         {
             "apiVersion": "2018-04-01",
             "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('virtualNetworkName')]",
+            "name": "[variables('virtualNetworkName')]",
             "location": "[parameters('location')]",
             "properties": {
                 "addressSpace": {
@@ -169,8 +148,8 @@
             "properties": {
                 "name": "[variables('aseName')]",
                 "location": "[parameters('location')]",
-                "dedicatedHostCount": "[parameters('dedicatedHostCount')]",
-                "zoneRedundant": "[parameters('zoneRedundant')]",
+                "dedicatedHostCount": 0,
+                "zoneRedundant": false,
                 "InternalLoadBalancingMode": "[parameters('ilbMode')]",
                 "virtualNetwork": {
                     "id": "[variables('subnetId')]"
@@ -178,7 +157,7 @@
             },
             "tags": {},
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
             ]
         },
         {
@@ -217,7 +196,7 @@
                 "siteConfig": {
                     "appSettings": [],
                     "linuxFxVersion": "[parameters('linuxFxVersion')]",
-                    "alwaysOn": "[parameters('alwaysOn')]"
+                    "alwaysOn": true
                 },
                 "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
@@ -244,7 +223,7 @@
                 "siteConfig": {
                     "appSettings": [],
                     "linuxFxVersion": "[parameters('linuxFxVersion')]",
-                    "alwaysOn": "[parameters('alwaysOn')]"
+                    "alwaysOn": true
                 },
                 "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
@@ -369,7 +348,6 @@
             "type": "Microsoft.Network/applicationGateways",
             "apiVersion": "2019-09-01",
             "location": "[parameters('location')]",
-            "zones": "[parameters('zones')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIpAddressName'))]"
             ],
@@ -568,7 +546,6 @@
             "sku": {
                 "name": "[parameters('gatewaySku')]"
             },
-            "zones": "[parameters('publicIpZones')]",
             "properties": {
                 "publicIPAllocationMethod": "[parameters('allocationMethod')]"
             }
