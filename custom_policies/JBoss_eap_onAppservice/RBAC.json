@@ -1,0 +1,23 @@
+{
+	"Name":"SpektraCustomRBAC",
+	"Id":null,
+	"IsCustom":true,
+	"Description":"SpektraTrainingCustomRole.",
+
+	"Actions":[
+        "Microsoft.Authorization/*/read",
+        "Microsoft.Network/applicationGateways/*",
+        "Microsoft.Network/privateDnsZones/*",
+        "Microsoft.Network/privateDnsZones/virtualNetworkLinks/*",
+        "Microsoft.Network/publicIPAddresses/*",
+        "Microsoft.Network/virtualNetworks/*",
+        "Microsoft.Resources/deployments/*",
+        "Microsoft.Resources/subscriptions/resourceGroups/read",
+        "Microsoft.Web/hostingEnvironments/*",
+        "Microsoft.Web/serverFarms/*",
+        "Microsoft.Web/sites/*",
+        "Microsoft.Web/sites/slots/*"
+    ],
+	"NotActions":[
+		]
+	}
