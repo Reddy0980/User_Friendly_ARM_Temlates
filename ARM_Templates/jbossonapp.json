@@ -5,10 +5,6 @@
         "webAppName": {
             "type": "string"
         },
-        "alwaysOn": {
-            "type": "string",
-            "defaultValue": true
-        },
         "sku": {
             "type": "string",
             "defaultValue": "IsolatedV2"
@@ -33,8 +29,6 @@
             "type": "string",
             "defaultValue": "JBOSSEAP|7-java11"
         },
-
-
         "virtualNetworkName": {
             "type": "string",
             "defaultValue": "ilb-ase-vnet"
