@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webAppName": {
+            "value": "redhattest"
+        },
+        "sku": {
+            "value": "IsolatedV2"
+        },
+        "skuCode": {
+            "value": "I1V2"
+        },
+        "workerSize": {
+            "value": "6"
+        },
+        "workerSizeId": {
+            "value": "6"
+        },
+        "numberOfWorkers": {
+            "value": "1"
+        },
+        "linuxFxVersion": {
+            "value": "JBOSSEAP|7-java11"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "virtualNetworkAddress": {
+            "value": "192.168.250.0/23"
+        },
+        "asEsubnetName": {
+            "value": "ase-subnet"
+        },
+        "asEsubnetAddress": {
+            "value": "192.168.250.0/24"
+        },
+        "gatewaySubnetName": {
+            "value": "gateway-subnet"
+        },
+        "gatewaySubnetAddress": {
+            "value": "192.168.251.0/24"
+        },
+        "delegationName": {
+            "value": "ilb-ase-delegation"
+        },
+        "ilbMode": {
+            "value": 3
+        },
+        "tier": {
+            "value": "Standard_v2"
+        },
+        "skuSize": {
+            "value": "Standard_v2"
+        },
+        "capacity": {
+            "value": 2
+        },
+        "publicIpAddressName": {
+            "value": "public-ip-address"
+        },
+        "gatewaySku": {
+            "value": "Standard"
+        },
+        "allocationMethod": {
+            "value": "Static"
+        }
+    }
+}
