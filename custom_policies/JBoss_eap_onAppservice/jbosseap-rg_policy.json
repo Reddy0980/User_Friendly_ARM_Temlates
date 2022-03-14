@@ -1,6 +1,29 @@
 {
-	 "if": {
-	    "anyOf": [
+    "if": {
+        "anyOf": [{
+                "allof": [
+                  {
+                    "field": "type",
+                    "equals": "Microsoft.Network/applicationGateways"
+                  },
+                  {
+                    "field": "type",
+                    "equals": "Microsoft.Web/serverfarms"
+                  },
+                  {
+                    "not": {
+                      "field": "Microsoft.Network/applicationGateways/Sku.Tier",
+                      "in": ["Standard_v2"]
+                      }
+                    },
+                    {
+                      "not": {
+                        "field": "Microsoft.Web/serverfarms/sku.name",
+                        "in": ["I1v2", "P1v3"]
+                        }
+                      }
+                  ]
+                },
 		 {
 			"not": {
 			  "anyOf": [
@@ -42,36 +65,7 @@
 				    }
                 ]
 			}
-		 },
-          {
-		  "allof": [
-			{
-			  "field": "type",
-			  "equals": "Microsoft.Network/applicationGateways"
-			},
-			{
-			  "not": {
-				"field": "Microsoft.Network/applicationGateways/Sku.Tier",
-				"in": ["Standard_v2"]
-				}
-			  }
-			]
-		  },
-          {
-		  "allof": [
-			{
-			  "field": "type",
-			  "equals": "Microsoft.Web/serverfarms"
-			},
-			{
-			  "not": {
-				"field": "Microsoft.Web/serverfarms/sku.name",
-				"in": ["I1v2", "P1v3"]
-				}
-			  }
-			]
-		  }
-
+		 }
 	  ]
 	},
 	"then": {
