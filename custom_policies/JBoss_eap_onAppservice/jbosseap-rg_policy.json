@@ -1,19 +1,6 @@
 {
     "if": {
-        "anyOf": [{
-                "allof": [
-                  {
-                    "field": "type",
-                    "equals": "Microsoft.Web/serverfarms"
-                  },
-                    {
-                      "not": {
-                        "field": "Microsoft.Web/serverfarms/sku.name",
-                        "in": ["Isolated", "PremiumV3"]
-                        }
-                      }
-                  ]
-                },
+        "anyOf": [
 		 {
 			"not": {
 			  "anyOf": [
