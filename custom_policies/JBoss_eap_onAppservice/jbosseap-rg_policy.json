@@ -13,7 +13,7 @@
                     {
                       "not": {
                         "field": "Microsoft.Web/serverfarms/sku.name",
-                        "in": ["IsolatedV2", "PremiumV3"]
+                        "in": ["Isolated", "PremiumV3"]
                         }
                       }
                   ]
