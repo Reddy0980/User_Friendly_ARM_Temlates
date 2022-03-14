@@ -4,10 +4,6 @@
                 "allof": [
                   {
                     "field": "type",
-                    "equals": "Microsoft.Network/applicationGateways"
-                  },
-                  {
-                    "field": "type",
                     "equals": "Microsoft.Web/serverfarms"
                   },
                     {
