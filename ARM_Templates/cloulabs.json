@@ -189,6 +189,17 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
             }
           ]
+        },
+        "osProfile": {
+            "computerName": "[parameters('AzureUserName')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+        },
+        "licenseType": "Windows_Client",
+        "diagnosticsProfile": {
+            "bootDiagnostics": {
+                "enabled": true
+            }
         }
       },
       "resources": [
