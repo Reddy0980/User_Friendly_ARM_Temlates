@@ -36,6 +36,9 @@
           "description": "Name for the Public IP used to access the Virtual Machine."
         }
       },
+        "azuserobjectid": {
+      "type": "string"
+    },
       "publicIPAllocationMethod": {
         "type": "string",
         "defaultValue": "Dynamic",
