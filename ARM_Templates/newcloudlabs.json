@@ -127,6 +127,7 @@
       "cloudlabsCommon": "[concat(' -AzureUserName ', parameters('AzureUserName'), ' -AzurePassword ', parameters('AzurePassword'), ' -AzureTenantID ', variables('AzureTenantID'), ' -AzureSubscriptionID ', variables('AzureSubscriptionID'), ' -ODLID ', parameters('ODLID'), ' -DeploymentID ', parameters('DeploymentID'))]",
       "addressPrefix": "10.0.0.0/16",
       "subnetName": "Subnet",
+      "publicIPAddressName": "pip-jumpvm",
       "subnetPrefix": "10.0.0.0/24",
       "virtualNetworkName": "MyVNET",
       "networkSecurityGroupName": "default-NSG"
@@ -316,6 +317,10 @@
       "type": "string",
       "value": "[resourceGroup().Name]"
     },
+    "Jump VM DNS Name": {
+      "type": "string",
+      "value": "[reference(variables('publicIPAddressName'), '2016-03-30').dnsSettings.fqdn]"
+    },
     "VM Admin Username": {
       "type": "string",
       "value": "[parameters('adminUsername')]"
@@ -323,6 +328,10 @@
     "VM Admin Password": {
       "type": "string",
       "value": "[parameters('adminPassword')]"
+    },
+    "DeploymentID": {
+      "type": "String",
+      "value": "[ parameters('DeploymentID')]"
     }
   }
 }
