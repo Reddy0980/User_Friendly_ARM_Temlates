@@ -38,7 +38,7 @@
            },
                    {
            "field": "type",
-           "in": ["Microsoft.Storage/storageAccounts/", "Microsoft.Insights/AlertRules", "Microsoft.Compute/disks", "Microsoft.Compute/virtualMachines", "Microsoft.Compute/virtualMachines/extensions", "Microsoft.Network/networkInterfaces", "Microsoft.Network/networkSecurityGroups", "Microsoft.Network/publicIPAddresses", "Microsoft.Network/virtualNetworks"]
+           "in": ["Microsoft.Storage/storageAccounts/", "Microsoft.Compute/disks", "Microsoft.Compute/virtualMachines", "Microsoft.Compute/virtualMachines/extensions", "Microsoft.Network/networkInterfaces", "Microsoft.Network/networkSecurityGroups", "Microsoft.Network/publicIPAddresses", "Microsoft.Network/virtualNetworks"]
            }
                ]
      }
