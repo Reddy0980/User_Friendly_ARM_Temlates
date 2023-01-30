@@ -14,6 +14,12 @@
                     "Microsoft.Search/searchServices/*",
                     "Microsoft.Storage/storageAccounts/*",
                     "Microsoft.Web/serverFarms/*",
+                    "Microsoft.Compute/virtualMachines/*",
+                    "Microsoft.Storage/storageAccounts/*",
+                    "Microsoft.Network/networkInterfaces/*",
+                    "Microsoft.Network/publicIPAddresses/*",
+                    "Microsoft.Network/virtualNetworks/*",
+                    "Microsoft.Network/networkSecurityGroups/*",
                     "Microsoft.Web/sites/*"
                 ],
     "NotActions":  [
