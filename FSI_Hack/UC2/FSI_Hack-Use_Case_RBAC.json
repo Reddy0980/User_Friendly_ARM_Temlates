@@ -24,7 +24,8 @@
                     "Microsoft.Search/searchServices/*",
                     "Microsoft.Storage/storageAccounts/*",
                     "Microsoft.Web/serverFarms/*",
-                    "Microsoft.Web/sites/*"
+                    "Microsoft.Web/sites/*",
+                    "Microsoft.Compute/virtualMachineScaleSets/*"
                 ],
     "NotActions":  [
 

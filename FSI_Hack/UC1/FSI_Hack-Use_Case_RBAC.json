@@ -20,7 +20,9 @@
                     "Microsoft.Network/publicIPAddresses/*",
                     "Microsoft.Network/virtualNetworks/*",
                     "Microsoft.Network/networkSecurityGroups/*",
-                    "Microsoft.Web/sites/*"
+                    "Microsoft.Web/sites/*",
+                    "Microsoft.BotService/botServices/*",
+                    "Microsoft.Compute/virtualMachineScaleSets/*"
                 ],
     "NotActions":  [
 
