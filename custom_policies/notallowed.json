@@ -1,0 +1,30 @@
+{
+  "if": {
+    "anyOf": [
+      {
+        "not": {
+          "anyOf": [
+            {
+              "field": "type",
+              "like": "Microsoft.Synapse/workspaces/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.Purview/accounts/*"
+            },
+            {
+              "field": "type",
+              "notin": [
+                "Microsoft.Synapse/workspaces",
+                "Microsoft.Purview/accounts"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "then": {
+    "effect": "deny"
+  }
+}
