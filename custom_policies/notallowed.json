@@ -1,17 +1,41 @@
 {
-  "if": {
-    "anyOf": [
-          {
-            "field": "type",
-            "equals": "Microsoft.Purview/accounts"
-          }, 
-          {
-            "field": "type",
-            "equals": "Microsoft.Synapse/workspaces"
-          }
-       ]
-    }, 
-  "then": {
-    "effect": "deny"
-  }
+  "if": {
+    "anyOf": [
+      {
+        "not": {
+          "anyOf": [
+            {
+              "field": "type",
+              "like": "Microsoft.Synapse/workspaces/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.Purview/accounts/*"
+            },
+            {
+              "field": "type",
+              "like": "Microsoft.Insights/components/*"
+            },
+            {
+              "field": "type",
+              "like": "microsoft.insights/actiongroups/*"
+            },
+            {
+              "field": "type",
+              "in": [
+                "Microsoft.Synapse/workspaces",
+                "Microsoft.Purview/accounts",
+                "Microsoft.Insights/components/*",
+                "microsoft.insights/actiongroups/*"
+
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "then": {
+    "effect": "deny"
+  }
 }
