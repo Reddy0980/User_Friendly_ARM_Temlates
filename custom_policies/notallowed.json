@@ -14,20 +14,9 @@
             },
             {
               "field": "type",
-              "like": "Microsoft.Insights/components/*"
-            },
-            {
-              "field": "type",
-              "like": "microsoft.insights/actiongroups/*"
-            },
-            {
-              "field": "type",
               "in": [
                 "Microsoft.Synapse/workspaces",
-                "Microsoft.Purview/accounts",
-                "Microsoft.Insights/components/*",
-                "microsoft.insights/actiongroups/*"
-
+                "Microsoft.Purview/accounts"
               ]
             }
           ]
