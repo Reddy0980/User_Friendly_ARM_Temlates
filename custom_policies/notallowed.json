@@ -31,6 +31,12 @@
           {
             "field": "type",
             "equals": "Microsoft.Databricks/workspaces"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Databricks/workspaces/sku.name",
+              "in": [ "Standard", "Premium" ]
+            }
           }
         ]
       }
