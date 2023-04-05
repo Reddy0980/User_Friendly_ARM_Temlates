@@ -22,13 +22,17 @@
           ]
         }
       },
-      { 
-          "allof": [ 
-            { 
-              "field": "type", 
-              "equals": "Microsoft.Databricks/workspaces/*" 
-            }
-          ]
+      {
+        "allof": [
+          {
+            "source": "action",
+            "equals": "Microsoft.Databricks/workspaces/write"
+          },
+          {
+            "field": "type",
+            "equals": "Microsoft.Databricks/workspaces"
+          }
+        ]
       }
     ]
   },
