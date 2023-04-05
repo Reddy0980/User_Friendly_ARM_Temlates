@@ -21,6 +21,14 @@
             }
           ]
         }
+      },
+      { 
+          "allof": [ 
+            { 
+              "field": "type", 
+              "equals": "Microsoft.Databricks/workspaces/*" 
+            }
+          ]
       }
     ]
   },
