@@ -1,21 +1,47 @@
 {
-	 "if": {
-	    "allOf": [
-            {
-			"anyOf": [
-			  {
-				"field": "type",
-				"equals": "Microsoft.Synapse/workspaces"
-			  },
-			  {
-				"field": "type",
-				"equals": "Microsoft.Purview/accounts"
-			  }
-			]
-		  }
-	  ]
-	},
-	"then": {
-	  "effect": "deny"
-	}
+	"if": {
+	   "anyOf": [
+		{
+		   "not": {
+			 "anyOf": [
+				{
+				    "field": "type",
+				    "like": "Microsoft.Compute/virtualMachines/*"
+				},
+                {
+				    "field": "type",
+				    "like": "Microsoft.Compute/virtualMachines/extensions/*"
+				},
+				{
+					"field": "type",
+					"in": ["Microsoft.Compute/virtualMachines", "Microsoft.Compute/virtualMachines/extensions"]
+				}
+			   ]
+		   }
+		},
+		   {
+		   "allOf": [
+			 {
+			   "source": "action",
+			   "equals": "Microsoft.Synapse/workspaces/write"
+			 },
+			 {
+			   "field": "type",
+			   "equals": "Microsoft.Synapse/workspaces"
+			 },
+			 {
+			   "source": "action",
+			   "equals": "Microsoft.Purview/accounts/write"
+			 },
+			 {
+			   "field": "type",
+			   "equals": "Microsoft.Purview/accounts"
+			 }
+		   ]
+		 }
+	 ]
+   },
+   "then": {
+	 "effect": "deny"
+   }
 }
