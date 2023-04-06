@@ -1,1 +1,29 @@
-
+{
+	 "if": {
+	    "anyOf": [
+            {
+			"allOf": [
+			  {
+				"source": "action",
+				"equals": "Microsoft.Synapse/workspaces/write"
+			  },
+			  {
+				"field": "type",
+				"equals": "Microsoft.Synapse/workspaces"
+			  },
+			  {
+				"source": "action",
+				"equals": "Microsoft.Purview/accounts/write"
+			  },
+			  {
+				"field": "type",
+				"equals": "Microsoft.Purview/accounts"
+			  }
+			]
+		  }
+	  ]
+	},
+	"then": {
+	  "effect": "deny"
+	}
+}
