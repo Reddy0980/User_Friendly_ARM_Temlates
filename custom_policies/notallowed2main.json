@@ -8,9 +8,13 @@
 				    "field": "type",
 				    "like": "Microsoft.Databricks/workspaces/*"
 				    },
+				  {
+				    "field": "type",
+				    "equals": "Microsoft.DataFactory/factories/*"
+				},
                     {
 				    "field": "type",
-				    "in": ["Microsoft.Databricks/workspaces"]
+				    "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories"]
 				    }
                 ]
 			}
