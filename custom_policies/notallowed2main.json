@@ -1,47 +1,51 @@
 {
-	 "if": {
-	    "anyOf": [
-		 {
-			"not": {
-			  "anyOf": [
-					{
-				    "field": "type",
-				    "like": "Microsoft.Databricks/workspaces/*"
-				    },
-				  {
-				    "field": "type",
-				    "equals": "Microsoft.DataFactory/factories/*"
-				},
-                    {
-				    "field": "type",
-				    "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories"]
-				    }
-                ]
-			}
-		 },
-            {
-			"allOf": [
-			  {
-				"source": "action",
-				"equals": "Microsoft.Synapse/workspaces/write"
-			  },
-			  {
-				"field": "type",
-				"equals": "Microsoft.Synapse/workspaces"
-			  },
-			  {
-				"source": "action",
-				"equals": "Microsoft.Purview/accounts/write"
-			  },
-			  {
-				"field": "type",
-				"equals": "Microsoft.Purview/accounts"
-			  }
-			]
-		  }
-	  ]
-	},
-	"then": {
-	  "effect": "deny"
-	}
+  "if": {
+     "anyOf": [
+    {
+     "not": {
+       "anyOf": [
+         {
+           "field": "type",
+           "like": "Microsoft.Databricks/workspaces/*"
+           },
+         {
+           "field": "type",
+           "equals": "Microsoft.DataFactory/factories/*"
+       },
+       {
+        "field": "type",
+        "equals": "Microsoft.CognitiveServices/accounts/*"
+    },
+                   {
+           "field": "type",
+           "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts"]
+           }
+               ]
+     }
+    },
+           {
+     "allOf": [
+       {
+       "source": "action",
+       "equals": "Microsoft.Synapse/workspaces/write"
+       },
+       {
+       "field": "type",
+       "equals": "Microsoft.Synapse/workspaces"
+       },
+       {
+       "source": "action",
+       "equals": "Microsoft.Purview/accounts/write"
+       },
+       {
+       "field": "type",
+       "equals": "Microsoft.Purview/accounts"
+       }
+     ]
+     }
+   ]
+ },
+ "then": {
+   "effect": "deny"
+ }
 }
