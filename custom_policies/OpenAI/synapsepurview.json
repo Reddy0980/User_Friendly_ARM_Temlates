@@ -87,6 +87,20 @@
 		 }
 	   ]
 	   },
+		   {
+		"allof": [
+		  {
+			"field": "type",
+			"equals": "Microsoft.ContainerService/managedClusters"
+		},
+		{
+		  "not": {
+			"field": "Microsoft.ContainerService/managedClusters/orchestratorProfile.orchestratorType",
+			"equals": "Kubernetes"
+		}
+		  }
+		]
+		},
 	   {
 		"allOf": [
 		{
