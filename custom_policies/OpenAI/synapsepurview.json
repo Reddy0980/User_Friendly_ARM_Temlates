@@ -4,14 +4,14 @@
     {
      "not": {
        "anyOf": [
+          {
+           "field": "type",
+           "equals": "Microsoft.DataFactory/factories/*"
+          },
          {
            "field": "type",
            "like": "Microsoft.Databricks/workspaces/*"
            },
-         {
-           "field": "type",
-           "equals": "Microsoft.DataFactory/factories/*"
-          },
           {
             "field": "type",
             "equals": "Microsoft.CognitiveServices/accounts/*"
