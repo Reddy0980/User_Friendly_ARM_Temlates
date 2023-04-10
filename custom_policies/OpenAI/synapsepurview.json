@@ -1,123 +1,99 @@
 {
-  "if": {
-     "anyOf": [
-    {
-     "not": {
-       "anyOf": [
-         {
-           "field": "type",
-           "like": "Microsoft.Databricks/workspaces/*"
-           },
-	       {
-                    "field": "type",
-                    "equals": "Microsoft.Compute/virtualMachines/*"
-                },
-         {
-           "field": "type",
-           "equals": "Microsoft.DataFactory/factories/*"
-          },
-          {
-            "field": "type",
-            "equals": "Microsoft.CognitiveServices/accounts/*"
-          },
-          {
-            "field": "type",
-            "equals": "Microsoft.KeyVault/vaults/*"
-        },
-        {
-            "field": "type",
-            "equals": "Microsoft.CognitiveServices/formrecognizer/*"
-        },
-        {
-            "field": "type",
-            "equals": "Microsoft.Storage/storageAccounts/*"
-        },
-        {
-            "field": "type",
-            "equals": "Microsoft.Web/sites/*"
-        },
-        {
-            "field": "type",
-            "equals": "Microsoft.Web/sites/functions/*"
-        },
-        {
-          "field": "type",
-          "equals": "Microsoft.ContainerService/*"
-      },
-      {
-          "field": "type",
-          "equals": "Microsoft.Authorization/roleAssignments/*"
-      },
-      {
-          "field": "type",
-          "equals": "Microsoft.CognitiveServices/*"
-      },
-      {
-          "field": "type",
-          "equals": "Microsoft.CognitiveServices/accounts/speechservices/*"
-      },
-                   {
-           "field": "type",
-           "in": ["Microsoft.Compute/virtualMachines","Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults","Microsoft.Web/sites","Microsoft.Web/sites/functions","Microsoft.ContainerService","Microsoft.Authorization/roleAssignments","Microsoft.CognitiveServices", "Microsoft.CognitiveServices/accounts/speechservices"]
-           }
-               ]
-     }
-    },
-           {
-     "allOf": [
-       {
-       "source": "action",
-       "equals": "Microsoft.Synapse/workspaces/write"
-       },
-       {
-       "field": "type",
-       "equals": "Microsoft.Synapse/workspaces"
-       },
-       {
-       "source": "action",
-       "equals": "Microsoft.Purview/accounts/write"
-       },
-       {
-       "field": "type",
-       "equals": "Microsoft.Purview/accounts"
-       },
-	   {
-		"field": "type",
-		"equals": "Microsoft.Compute/virtualMachines"
+	"if": {
+	   "anyOf": [
+	  {
+	   "not": {
+		 "anyOf": [
+		   {
+			 "field": "type",
+			 "like": "Microsoft.Databricks/workspaces/*"
+			 },
+		   {
+			 "field": "type",
+			 "equals": "Microsoft.DataFactory/factories/*"
+			},
+			{
+			  "field": "type",
+			  "equals": "Microsoft.CognitiveServices/accounts/*"
+			},
+			{
+			  "field": "type",
+			  "equals": "Microsoft.KeyVault/vaults/*"
+		  },
+		  {
+			  "field": "type",
+			  "equals": "Microsoft.CognitiveServices/formrecognizer/*"
+		  },
+		  {
+			  "field": "type",
+			  "equals": "Microsoft.Storage/storageAccounts/*"
+		  },
+		  {
+			  "field": "type",
+			  "equals": "Microsoft.Web/sites/*"
+		  },
+		  {
+			  "field": "type",
+			  "equals": "Microsoft.Web/sites/functions/*"
+		  },
+		  {
+			"field": "type",
+			"equals": "Microsoft.ContainerService/*"
 		},
 		{
-		"anyOf": [
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_H*"
-			},
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_NC*"
-			},
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_ND*"
-			},
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_E*"
-			},
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_F*"
-			},
-			{
-				"field": "Microsoft.Compute/virtualMachines/sku.name",
-				"like": "Standard_G*"
-			}
-			]
-		}
-     ]
-     }
-   ]
- },
- "then": {
-   "effect": "deny"
- }
-}
+			"field": "type",
+			"equals": "Microsoft.ContainerService/managedClusters/*"
+		},
+		{
+			"field": "Microsoft.ContainerService/managedClusters/orchestratorType",
+			"equals": "Kubernetes"
+		},
+		{
+			"field": "type",
+			"equals": "Microsoft.Authorization/roleAssignments/*"
+		},
+		{
+			"field": "type",
+			"equals": "Microsoft.CognitiveServices/*"
+		},
+		{
+			"field": "type",
+			"equals": "Microsoft.CognitiveServices/accounts/speechservices/*"
+		},
+					 {
+			 "field": "type",
+			 "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults","Microsoft.Web/sites","Microsoft.Web/sites/functions","Microsoft.ContainerService","Microsoft.Authorization/roleAssignments","Microsoft.CognitiveServices", "Microsoft.CognitiveServices/accounts/speechservices","Microsoft.ContainerService/managedClusters"]
+			 }
+				 ]
+	   }
+	  },
+			 {
+	   "allOf": [
+		 {
+		 "source": "action",
+		 "equals": "Microsoft.Synapse/workspaces/write"
+		 },
+		 {
+		 "field": "type",
+		 "equals": "Microsoft.Synapse/workspaces"
+		 },
+		 {
+		 "source": "action",
+		 "equals": "Microsoft.Purview/accounts/write"
+		 },
+		 {
+		 "field": "type",
+		 "equals": "Microsoft.Purview/accounts"
+		 },
+		 {
+		  "field": "type",
+		  "equals": "Microsoft.Compute/virtualMachines"
+		  }
+	   ]
+	   }
+	 ]
+   },
+   "then": {
+	 "effect": "deny"
+   }
+  }
