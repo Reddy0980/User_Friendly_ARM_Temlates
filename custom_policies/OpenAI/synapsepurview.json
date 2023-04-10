@@ -1,4 +1,4 @@
-{
+ {
     "if": {
       "anyOf": [
         {
@@ -38,6 +38,10 @@
               },
               {
                 "field": "type",
+                "like": "Microsoft.Network/routeTables/*"
+              },
+              {
+                "field": "type",
                 "like": "Microsoft.Compute/virtualMachines/extensions/*"
               },
               {
@@ -72,13 +76,17 @@
                 "field": "type",
                 "equals": "Microsoft.Web/sites/*"
               },
+	      {
+                "field": "type",
+                "equals": "Microsoft.Web/serverfarms/*"
+              },
               {
                 "field": "type",
                 "equals": "Microsoft.Web/sites/functions/*"
               },
               {
                 "field": "type",
-                "equals": "Microsoft.ContainerService/managedClusters/write"
+                "equals": "Microsoft.ContainerService/managedClusters/*"
               },
               {
                 "field": "type",
@@ -92,7 +100,7 @@
                 "field": "type",
                 "equals": "Microsoft.CognitiveServices/*"
               },
-							{
+              {
                 "field": "type",
                 "equals": "Microsoft.ManagedIdentity/userAssignedIdentities/*"
               },
@@ -102,15 +110,26 @@
               },
               {
                 "field": "type",
-                "like": "microsoft.insights/components/*"
+                "like": "Microsoft.insights/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.OperationsManagement/*"
+              },
+							{
+                "field": "type",
+                "like": "Microsoft.DataFactory/factories/*"
               },
               {
                 "field": "type",
                 "in": [
                   "Microsoft.Compute/virtualMachines",
                   "Microsoft.OperationalInsights/workspaces",
+                  "Microsoft.Network/routeTables",
+		  "Microsoft.DataFactory/factories",
                   "Microsoft.Network/loadBalancers",
-		 "Microsoft.ManagedIdentity/userAssignedIdentities",
+                  "Microsoft.OperationsManagement",
+                  "Microsoft.ManagedIdentity/userAssignedIdentities",
                   "Microsoft.Resources/deployments",
                   "microsoft.insights/components",
                   "Microsoft.Compute/virtualMachineScaleSets",
@@ -127,9 +146,11 @@
                   "Microsoft.CognitiveServices/formrecognizer",
                   "Microsoft.KeyVault/vaults",
                   "Microsoft.Web/sites",
+		  "Microsoft.Web/serverfarms",
+                  "Microsoft.insights",
                   "Microsoft.Web/sites/functions",
                   "Microsoft.Authorization/roleAssignments",
-                  "Microsoft.ContainerService/managedClusters/write",
+                  "Microsoft.ContainerService/managedClusters",
                   "Microsoft.CognitiveServices/accounts/speechservices"
                 ]
               }
