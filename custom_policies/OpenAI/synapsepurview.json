@@ -8,14 +8,14 @@
             "field": "type",
             "like": "Microsoft.Compute/virtualMachines/*"
             },
+	       {
+            "field": "type",
+            "like": "Microsoft.Compute/virtualMachines/extensions/*"
+            },
          {
            "field": "type",
            "like": "Microsoft.Databricks/workspaces/*"
            },
-           {
-            "field": "type",
-            "like": "Microsoft.Compute/virtualMachines/extensions/*"
-            },
          {
            "field": "type",
            "equals": "Microsoft.DataFactory/factories/*"
