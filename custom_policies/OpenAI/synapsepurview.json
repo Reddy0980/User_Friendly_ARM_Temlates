@@ -1,6 +1,4 @@
 {
-  "mode": "Indexed",
-  "policyRule": {
     "if": {
       "anyOf": [
         {
@@ -196,6 +194,4 @@
     "then": {
       "effect": "deny"
     }
-  },
-  "parameters": {}
-}
+  }
