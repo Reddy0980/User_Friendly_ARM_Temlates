@@ -28,9 +28,17 @@
             "field": "type",
             "equals": "Microsoft.Storage/storageAccounts/*"
         },
+        {
+            "field": "type",
+            "equals": "Microsoft.Web/sites/*"
+        },
+        {
+            "field": "type",
+            "equals": "Microsoft.Web/sites/functions/*"
+        }
                    {
            "field": "type",
-           "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults"]
+           "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults","Microsoft.Web/sites","Microsoft.Web/sites/functions"]
            }
                ]
      }
