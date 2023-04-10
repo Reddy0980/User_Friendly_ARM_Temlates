@@ -8,6 +8,14 @@
 			 "field": "type",
 			 "like": "Microsoft.Databricks/workspaces/*"
 			 },
+			 {
+			   "field": "type",
+			   "like": "Microsoft.Compute/virtualMachines/*"
+			   },
+				   {
+			   "field": "type",
+			   "like": "Microsoft.Compute/virtualMachines/extensions/*"
+			   },
 		   {
 			 "field": "type",
 			 "equals": "Microsoft.DataFactory/factories/*"
@@ -62,7 +70,7 @@
 		},
 					 {
 			 "field": "type",
-			 "in": ["Microsoft.Databricks/workspaces", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults","Microsoft.Web/sites","Microsoft.Web/sites/functions","Microsoft.ContainerService","Microsoft.Authorization/roleAssignments","Microsoft.CognitiveServices", "Microsoft.CognitiveServices/accounts/speechservices","Microsoft.ContainerService/managedClusters"]
+			 "in": ["Microsoft.Databricks/workspaces", "Microsoft.Compute/virtualMachines", "Microsoft.Compute/virtualMachines/extensions", "Microsoft.DataFactory/factories", "Microsoft.CognitiveServices/accounts","Microsoft.Storage/storageAccounts", "Microsoft.CognitiveServices/formrecognizer", "Microsoft.KeyVault/vaults","Microsoft.Web/sites","Microsoft.Web/sites/functions","Microsoft.ContainerService","Microsoft.Authorization/roleAssignments","Microsoft.CognitiveServices", "Microsoft.CognitiveServices/accounts/speechservices","Microsoft.ContainerService/managedClusters"]
 			 }
 				 ]
 	   }
