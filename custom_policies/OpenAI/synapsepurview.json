@@ -44,10 +44,14 @@
 			  "field": "type",
 			  "equals": "Microsoft.Web/sites/functions/*"
 		  },
-		  {
-			"field": "type",
-			"equals": "Microsoft.ContainerService/managedClusters/*"
-		},
+		    {
+                "field": "type",
+                "equals": "Microsoft.ContainerService/managedClusters"
+            },
+            {
+                "field": "Microsoft.ContainerService/managedClusters/orchestratorProfile.orchestratorType",
+                "equals": "Kubernetes"
+            },
 		{
 			"field": "type",
 			"equals": "Microsoft.Authorization/roleAssignments/*"
@@ -87,20 +91,6 @@
 		 }
 	   ]
 	   },
-		   {
-		"allof": [
-		  {
-			"field": "type",
-			"equals": "Microsoft.ContainerService/managedClusters"
-		},
-		{
-		  "not": {
-			"field": "Microsoft.ContainerService/managedClusters/orchestratorProfile.orchestratorType",
-			"equals": "Kubernetes"
-		}
-		  }
-		]
-		},
 	   {
 		"allOf": [
 		{
