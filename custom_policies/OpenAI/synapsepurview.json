@@ -76,7 +76,7 @@
                 "field": "type",
                 "equals": "Microsoft.Web/sites/*"
               },
-	      {
+              {
                 "field": "type",
                 "equals": "Microsoft.Web/serverfarms/*"
               },
@@ -116,17 +116,32 @@
                 "field": "type",
                 "like": "Microsoft.OperationsManagement/*"
               },
-							{
+              {
                 "field": "type",
                 "like": "Microsoft.DataFactory/factories/*"
               },
               {
                 "field": "type",
+                "like": "Microsoft.Graph/applications/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Graph/servicePrincipals/*"
+              },
+	      {
+                "field": "type",
+                "like": "Microsoft.Search/searchServices/*"
+              },
+              {
+                "field": "type",
                 "in": [
                   "Microsoft.Compute/virtualMachines",
+                  "Microsoft.Graph/applications",
+                  "Microsoft.Graph/servicePrincipals",
                   "Microsoft.OperationalInsights/workspaces",
+		  "Microsoft.Search/searchServices",
                   "Microsoft.Network/routeTables",
-		  "Microsoft.DataFactory/factories",
+                  "Microsoft.DataFactory/factories",
                   "Microsoft.Network/loadBalancers",
                   "Microsoft.OperationsManagement",
                   "Microsoft.ManagedIdentity/userAssignedIdentities",
@@ -146,7 +161,7 @@
                   "Microsoft.CognitiveServices/formrecognizer",
                   "Microsoft.KeyVault/vaults",
                   "Microsoft.Web/sites",
-		  "Microsoft.Web/serverfarms",
+                  "Microsoft.Web/serverfarms",
                   "Microsoft.insights",
                   "Microsoft.Web/sites/functions",
                   "Microsoft.Authorization/roleAssignments",
