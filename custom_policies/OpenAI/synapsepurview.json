@@ -5,6 +5,18 @@
           "not": {
             "anyOf": [
               {
+                  "field": "type",
+                  "equals": "Microsoft.ContainerRegistry/registries"
+              },
+              {
+                  "field": "type",
+                  "equals": "Microsoft.BotServices/botServices"
+              },
+              {
+                  "field": "type",
+                  "equals": "Microsoft.CognitiveServices/accounts"
+              },
+              {
                 "field": "type",
                 "like": "Microsoft.Compute/virtualMachines/*"
               },
@@ -135,11 +147,14 @@
               {
                 "field": "type",
                 "in": [
+                  "Microsoft.CognitiveServices/accounts",
+                  "Microsoft.BotServices/botServices",
+                  "Microsoft.ContainerRegistry/registries",
                   "Microsoft.Compute/virtualMachines",
                   "Microsoft.Graph/applications",
                   "Microsoft.Graph/servicePrincipals",
                   "Microsoft.OperationalInsights/workspaces",
-		  "Microsoft.Search/searchServices",
+		              "Microsoft.Search/searchServices",
                   "Microsoft.Network/routeTables",
                   "Microsoft.DataFactory/factories",
                   "Microsoft.Network/loadBalancers",
