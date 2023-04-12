@@ -152,14 +152,14 @@
                 "field": "type",
                 "in": [
                   "Microsoft.BotServices/botServices",
-		  "Microsoft.Authorization/policyAssignments",
+		    "Microsoft.Authorization/policyAssignments",
                   "Microsoft.ContainerRegistry/registries",
                   "Microsoft.Compute/virtualMachines",
-		  "Microsoft.Web/hostingEnvironments"
+		   "Microsoft.Web/hostingEnvironments",
                   "Microsoft.Graph/applications",
                   "Microsoft.Graph/servicePrincipals",
                   "Microsoft.OperationalInsights/workspaces",
-		  "Microsoft.Search/searchServices",
+		   "Microsoft.Search/searchServices",
                   "Microsoft.Network/routeTables",
                   "Microsoft.DataFactory/factories",
                   "Microsoft.Network/loadBalancers",
