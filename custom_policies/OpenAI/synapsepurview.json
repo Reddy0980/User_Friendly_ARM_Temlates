@@ -144,10 +144,15 @@
                 "field": "type",
                 "like": "Microsoft.Web/hostingEnvironments/*"
               },
+		    {
+                "field": "type",
+                "like": "Microsoft.Authorization/policyAssignments/*"
+              },
               {
                 "field": "type",
                 "in": [
                   "Microsoft.BotServices/botServices",
+		  "Microsoft.Authorization/policyAssignments",
                   "Microsoft.ContainerRegistry/registries",
                   "Microsoft.Compute/virtualMachines",
 		  "Microsoft.Web/hostingEnvironments"
