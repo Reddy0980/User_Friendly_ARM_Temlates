@@ -11,11 +11,7 @@
               {
                   "field": "type",
                   "equals": "Microsoft.BotServices/botServices"
-              },
-              {
-                  "field": "type",
-                  "equals": "Microsoft.CognitiveServices/accounts"
-              },
+              },    
               {
                 "field": "type",
                 "like": "Microsoft.Compute/virtualMachines/*"
@@ -151,7 +147,6 @@
               {
                 "field": "type",
                 "in": [
-                  "Microsoft.CognitiveServices/accounts",
                   "Microsoft.BotServices/botServices",
                   "Microsoft.ContainerRegistry/registries",
                   "Microsoft.Compute/virtualMachines",
