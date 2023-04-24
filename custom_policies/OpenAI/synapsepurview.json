@@ -52,6 +52,14 @@
                 "field": "type",
                 "like": "Microsoft.Compute/virtualMachines/extensions/*"
               },
+	      {
+	      	"field": "type",
+		"like": "Microsoft.Compute/virtualMachines/loginWithLocalUser/action/*"
+	      },
+	      {
+	      	"field": "type",
+		"like": "Microsoft.Compute/virtualMachines/configurations/extensions/*"
+	      },
               {
                 "field": "type",
                 "like": "Microsoft.Compute/virtualMachineScaleSets/*"
@@ -174,6 +182,8 @@
                   "Microsoft.Network/networkSecurityGroups",
                   "Microsoft.Network/networkInterfaces",
                   "Microsoft.Compute/virtualMachines/extensions",
+		  "Microsoft.Compute/virtualMachines/configurations/extensions",
+		  "Microsoft.Compute/virtualMachines/loginWithLocalUser/action",
                   "Microsoft.Databricks/workspaces",
                   "Microsoft.DataFactory/factories",
                   "Microsoft.CognitiveServices/accounts",
