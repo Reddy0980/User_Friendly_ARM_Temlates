@@ -26,9 +26,6 @@
     "vmSize": {
       "value": "Standard_B1s"
     },
-    "location": {
-      "value": "[resourceGroup().location]"
-    },
     "vmName": {
       "value": "simple-vm"
     }
