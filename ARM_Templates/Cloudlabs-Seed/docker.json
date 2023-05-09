@@ -313,10 +313,6 @@
     "Labvm Password": {
       "type": "String",
       "value": "[parameters('adminPassword')]"
-    },
-    "LabVM IP Address": {
-        "type": "String",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))).ipAddress]"
     }
     }
   }
