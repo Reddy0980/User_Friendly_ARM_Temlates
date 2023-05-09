@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "demouser"
+    },
+    "adminPassword": {
+      "value": "Password.1!!"
+    },
+    "dnsLabelPrefix": {
+      "value": "[toLower(format('{0}-{1}', parameters('vmName'), uniqueString(resourceGroup().id, parameters('vmName'))))]"
+    },
+    "publicIpName": {
+      "value": "myPublicIP"
+    },
+    "publicIPAllocationMethod": {
+      "value": "Dynamic"
+    },
+    "publicIpSku": {
+      "value": "Basic"
+    },
+    "OSVersion": {
+      "value": "cloudlabs-ubuntu-seed-base"
+    },
+    "vmSize": {
+      "value": "Standard_B1s"
+    },
+    "location": {
+      "value": "[resourceGroup().location]"
+    },
+    "vmName": {
+      "value": "simple-vm"
+    }
+  }
+}
