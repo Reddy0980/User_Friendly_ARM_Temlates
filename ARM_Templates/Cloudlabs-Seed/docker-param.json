@@ -24,7 +24,7 @@
         "value": "Standard_B1s"
       },
       "vmName": {
-        "value": "simple-vm"
+        "value": "Lab-VM"
       }
     }
   }
