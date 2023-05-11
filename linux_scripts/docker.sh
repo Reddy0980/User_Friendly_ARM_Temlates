@@ -1,6 +1,3 @@
-#!/bin/bash
-
-#Add these lines
 echo "alias dockps='docker ps --format {{.ID}} {{.Names}}'" >> ~/.bashrc
 echo "alias dcbuild='docker-compose build'" >> ~/.bashrc
 echo "alias dcup='docker-compose up'" >> ~/.bashrc
