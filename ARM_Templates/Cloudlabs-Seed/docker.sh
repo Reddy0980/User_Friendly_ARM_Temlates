@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+directory="$HOME/Docker"
+
+if [ ! -d "$directory" ]; then
+    mkdir "$directory"
+fi
+
+cd "$directory"
+
 Line1='alias dockps="docker ps --format {{.ID}} {{.Names}}"'
 Line2='alias dcbuild="docker-compose build"' 
 Line3='alias dcup="docker-compose up"'
