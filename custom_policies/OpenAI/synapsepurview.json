@@ -24,6 +24,10 @@
                 "field": "type",
                 "like": "Microsoft.Resources/deployments/*"
               },
+		    	{
+                "field": "type",
+                "like": "Microsoft.Resources/deployments/validate/*"
+              },
               {
                 "field": "type",
                 "like": "Microsoft.Compute/disks/*"
@@ -174,6 +178,7 @@
                   "Microsoft.OperationsManagement",
                   "Microsoft.ManagedIdentity/userAssignedIdentities",
                   "Microsoft.Resources/deployments",
+		"Microsoft.Resources/deployments/validate",
                   "microsoft.insights/components",
                   "Microsoft.Compute/virtualMachineScaleSets",
                   "Microsoft.Compute/disks",
