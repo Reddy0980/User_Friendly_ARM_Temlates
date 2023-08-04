@@ -51,7 +51,7 @@ In this lab, we will use three machines that are connected to the same LAN. We c
 three containers. Figure 1 depicts the lab environment setup using containers. We will do all the attacks on
 the attacker container, while using the other containers as the user machines.
 
-![](Images/N_Spoof_1.png)
+![image](https://github.com/AdarshRazor/User_Friendly_ARM_Temlates/assets/33658792/88cf8458-64ed-4363-a6ed-1925b5f8317f)
 
 Figure 1: Lab environment setup
 
