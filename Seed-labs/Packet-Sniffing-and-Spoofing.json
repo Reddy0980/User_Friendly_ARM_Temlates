@@ -5,7 +5,7 @@
     "BaseURL": "https://github.com/CloudLabs-MOC/CloudLabs-SEED/tree/main",
     "Files": [
       {
-        "RawFilePath": "https://raw.githubusercontent.com/CloudLabs-MOC/CloudLabs-SEED/main/Network%20Security/Packet%20Sniffing%20%26%20Spoofing/Packet-Sniffing-%26-Spoofing.md",
+        "RawFilePath": "https://raw.githubusercontent.com/AdarshRazor/User_Friendly_ARM_Temlates/main/Seed-labs/Packet-Sniffing-and-Spoofing.md",
         "Order": 1
       }
     ]
