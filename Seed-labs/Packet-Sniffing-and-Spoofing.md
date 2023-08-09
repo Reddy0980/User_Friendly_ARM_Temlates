@@ -188,6 +188,10 @@ Scapy is different: it can be used not only as a tool, but also as a building bl
 and spoofing tools, i.e., we can integrate the Scapy functionalities into our own program. In this set of tasks,
 we will use Scapy for each task.
 
+```python
+$ sudo pip3 install scap
+```
+
 To use Scapy, we can write a Python program, and then execute this program using Python. See the
 following example. We should run Python using the root privilege because the privilege is required for
 spoofing packets. At the beginning of the program (Line¿), we should import all Scapy’s modules.
