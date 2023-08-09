@@ -189,7 +189,7 @@ and spoofing tools, i.e., we can integrate the Scapy functionalities into our ow
 we will use Scapy for each task.
 
 ```python
-$ sudo pip3 install scap
+$ sudo pip3 install scapy
 ```
 
 To use Scapy, we can write a Python program, and then execute this program using Python. See the
