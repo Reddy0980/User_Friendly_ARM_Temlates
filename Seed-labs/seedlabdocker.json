@@ -63,7 +63,7 @@
             "publisher": "spektra",
             "offer": "seedvmubuntu",
             "sku": "cloudlabs-ubuntu-seed-docker-gui",
-            "version": "20.04.01"
+            "version": "latest"
           },
           "osDisk": {
             "createOption": "fromImage",
