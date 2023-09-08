@@ -42,7 +42,7 @@
       "apiVersion": "2017-03-30",
       "location": "[variables('location')]",
       "plan": {
-        "name": "cloudlabs-ubuntu-seed-docker-gui-2",
+        "name": "cloudlabs-ubuntu-seedlab",
         "publisher": "spektra",
         "product": "seedvmubuntu"
       },
@@ -62,7 +62,7 @@
           "imageReference": {
             "publisher": "spektra",
             "offer": "seedvmubuntu",
-            "sku": "cloudlabs-ubuntu-seed-docker-gui-2",
+            "sku": "cloudlabs-ubuntu-seedlab",
             "version": "latest"
           },
           "osDisk": {
