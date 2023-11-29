@@ -1,0 +1,137 @@
+ {
+    "if": {
+      "anyOf": [
+        {
+          "not": {
+            "anyOf": [ 
+              {
+                "field": "type",
+                "like": "Microsoft.Compute/virtualMachines/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/networkInterfaces/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Resources/deployments/*"
+              },
+		    	{
+                "field": "type",
+                "like": "Microsoft.Resources/deployments/validate/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Compute/disks/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/networkSecurityGroups/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/publicIPAddresses/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/virtualNetworks/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/loadBalancers/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Network/routeTables/*"
+              },
+              {
+                "field": "type",
+                "like": "Microsoft.Compute/virtualMachines/extensions/*"
+              },
+	      {
+	      	"field": "type",
+		"like": "Microsoft.Compute/virtualMachines/loginWithLocalUser/action/*"
+	      },
+	      {
+	      	"field": "type",
+		"like": "Microsoft.Compute/virtualMachines/configurations/extensions/*"
+	      },
+              {
+                "field": "type",
+                "like": "Microsoft.Compute/virtualMachineScaleSets/*"
+              },
+              {
+                "field": "type",
+                "in": [
+                  "Microsoft.Compute/virtualMachines",
+		              "Microsoft.Web/hostingEnvironments",
+                  "Microsoft.Resources/deployments",
+		              "Microsoft.Resources/deployments/validate",
+                  "microsoft.insights/components",
+                  "Microsoft.Compute/virtualMachineScaleSets",
+                  "Microsoft.Compute/disks",
+                  "Microsoft.Network/virtualNetworks",
+                  "Microsoft.Network/publicIPAddresses",
+                  "Microsoft.Network/networkSecurityGroups",
+                  "Microsoft.Network/networkInterfaces",
+                  "Microsoft.Compute/virtualMachines/extensions",
+		              "Microsoft.Compute/virtualMachines/configurations/extensions",
+		              "Microsoft.Compute/virtualMachines/loginWithLocalUser/action",
+                  "Microsoft.CognitiveServices/accounts",
+                  "Microsoft.Storage/storageAccounts"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "allOf": [
+            {
+              "source": "action",
+              "equals": "Microsoft.Synapse/workspaces/write"
+            },
+            {
+              "field": "type",
+              "equals": "Microsoft.Synapse/workspaces"
+            },
+            {
+              "source": "action",
+              "equals": "Microsoft.Purview/accounts/write"
+            },
+            {
+              "field": "type",
+              "equals": "Microsoft.Purview/accounts"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Compute/virtualMachines"
+            },
+            {
+              "not": {
+                "allOf": [
+                  {
+                    "field": "Microsoft.Compute/virtualMachines/sku.name",
+                    "in": [
+                      "Standard_B2s",
+                      "Standard_B1s",
+                      "Standard_B2ms",
+                      "Standard_B1ls",
+                      "Standard_B4ms",
+                      "Standard_D4s_v3"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
